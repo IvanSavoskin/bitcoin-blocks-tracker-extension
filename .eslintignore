@@ -1,0 +1,4 @@
+**/*.js
+**/*.jsx
+node_modules
+dist
