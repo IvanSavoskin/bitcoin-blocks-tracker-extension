@@ -1,0 +1,49 @@
+.form-toggle {
+  display: inline-block;
+  overflow: hidden;
+
+  input {
+    display: none;
+  }
+
+  label {
+    border: 1px solid #999;
+    border-right: 0;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 34px;
+    padding: 0 15px;
+    user-select: none;
+  }
+
+  &-item,
+  %form-toggle-item {
+    display: inline-block;
+    float: left;
+
+    &-right {
+      @extend %form-toggle-item;
+
+      label {
+        border-radius: 0 6px 6px 0;
+        border-right: 1px solid #999;
+      }
+
+      input:checked + label {
+        background: #ffc5c5;
+      }
+    }
+
+    &-left {
+      @extend %form-toggle-item;
+
+      label {
+        border-radius: 6px 0 0 6px;
+      }
+
+      input:checked + label {
+        background: #bfb;
+      }
+    }
+  }
+}

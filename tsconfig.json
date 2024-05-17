@@ -1,0 +1,27 @@
+{
+    "ts-node": {
+        "compilerOptions": {
+            "target": "es6",
+            "module": "commonjs"
+        }
+    },
+    "compilerOptions": {
+        "strict": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "module": "ES6",
+        "esModuleInterop": true,
+        "sourceMap": false,
+        "rootDir": "src",
+        "outDir": "dist/js",
+        "noEmitOnError": true,
+        "jsx": "react",
+        "typeRoots": [ "node_modules/@types", "./custom_typing"]
+    },
+    "include": [
+        "./src/**/*",
+        "./webpack.config.ts",
+        "./custom_typing/**/*"
+    ],
+    "exclude": ["public", "./node_modules"]
+}

@@ -1,0 +1,28 @@
+.container {
+  display: grid;
+  gap: 10px 10px;
+  grid-template-columns: repeat(3, 70px);
+}
+
+.fees {
+  &-container {
+    align-items: flex-end;
+    column-gap: 2px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  &-fee {
+    font-size: 20px;
+  }
+
+  &-sats {
+    color: var(#fff6);
+    font-size: 12px;
+  }
+}
+
+.loading {
+  color: var(#fff6);
+  font-size: 18px;
+}
