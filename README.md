@@ -5,6 +5,9 @@
 
 <p>Extension for track Bitcoin blocks and fees via Mempool space</p>
 
+<a rel="noreferrer noopener" target="_blank" href="https://chromewebstore.google.com/detail/bitcoin-blocks-tracker/jhdbfjhembciojemihcimllmbibiakim">
+    <img alt="Chrome Web Store" src="https://img.shields.io/badge/Chrome-141e24.svg?&style=for-the-badge&logo=google-chrome&logoColor=white">
+</a>
 <a href="https://github.com/IvanSavoskin/bitcoin-blocks-tracker-extension">
 	<img src="https://img.shields.io/github/languages/top/IvanSavoskin/bitcoin-blocks-tracker-extension?style=flat-square&logo=github" alt="GitHub top language" />
 </a>
