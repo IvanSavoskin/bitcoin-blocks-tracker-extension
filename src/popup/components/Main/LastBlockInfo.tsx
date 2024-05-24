@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { BlockInfo, BlockPopupMessage, PopupMessage } from "../../../custom_typing/types";
-import { sendMessage } from "../../utils/utils";
+import { BlockInfo, BlockPopupMessage, PopupMessage } from "../../../../custom_typing/types";
+import { sendMessage } from "../../../utils/utils";
 import styles from "./styles/LastBlockInfo.module.scss";
 
 export default function LastBlockInfo() {

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Fees, FeesPopupMessage, PopupMessage } from "../../../custom_typing/types";
-import { sendMessage } from "../../utils/utils";
+import { Fees, FeesPopupMessage, PopupMessage } from "../../../../custom_typing/types";
+import { sendMessage } from "../../../utils/utils";
 import styles from "./styles/FeeInfo.module.scss";
 
 export default function FeeInfo() {

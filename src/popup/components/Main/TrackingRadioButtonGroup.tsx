@@ -1,6 +1,4 @@
-import React from "react";
-
-import { sendMessage } from "../../utils/utils";
+import { sendMessage } from "../../../utils/utils";
 import styles from "./styles/RadioButtons.module.scss";
 
 interface TrackingRadioButtonGroupProps {
