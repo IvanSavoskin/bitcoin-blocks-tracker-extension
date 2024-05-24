@@ -16,7 +16,14 @@
         "outDir": "dist/js",
         "noEmitOnError": true,
         "jsx": "react-jsx",
-        "typeRoots": [ "node_modules/@types", "./custom_typing"]
+        "typeRoots": [ "node_modules/@types", "./custom_typing"],
+        "baseUrl": "src",
+        "paths": {
+            "@main/*": ["popup/components/Main/*"],
+            "@static/*": ["static/*"],
+            "@coreUtils/*": ["utils/*"],
+            "@models/*": ["models/*"]
+        }
     },
     "include": [
         "./src/**/*",

@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import Main from "./components/Main";
+import Main from "@main/index";
+
 import styles from "./styles/Popup.module.scss";
 
 function Popup() {

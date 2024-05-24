@@ -1,5 +1,5 @@
-import { OffscreenMessage } from "../../custom_typing/types";
-import notification from "../static/sounds/notification.m4a";
+import { OffscreenMessage } from "@models/types";
+import notification from "@static/sounds/notification.m4a";
 
 console.debug("Initialize offscreen");
 

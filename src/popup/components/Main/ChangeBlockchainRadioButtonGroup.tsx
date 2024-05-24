@@ -1,4 +1,4 @@
-import { sendMessage } from "../../../utils/utils";
+import { sendMessage } from "@coreUtils//utils";
 import styles from "./styles/RadioButtons.module.scss";
 
 interface TrackingRadioButtonGroupProps {

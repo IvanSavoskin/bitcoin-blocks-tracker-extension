@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Fees, FeesPopupMessage, PopupMessage } from "../../../../custom_typing/types";
-import { sendMessage } from "../../../utils/utils";
+import { sendMessage } from "@coreUtils//utils";
+import { Fees, FeesPopupMessage, PopupMessage } from "@models/types";
+
 import styles from "./styles/FeeInfo.module.scss";
 
 export default function FeeInfo() {

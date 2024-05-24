@@ -115,7 +115,13 @@ const webpack_ = (_: any, argv: any) => {
             ]
         },
         resolve: {
-            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a", ".svg"]
+            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a", ".svg"],
+            alias: {
+                "@main/*": path.resolve(__dirname, "src/popup/components/Main"),
+                "@static/*": path.resolve(__dirname, "src/static"),
+                "@coreUtils/*": path.resolve(__dirname, "src/utils"),
+                "@models/*": path.resolve(__dirname, "src/models")
+            }
         },
         plugins: [
             new CleanWebpackPlugin({

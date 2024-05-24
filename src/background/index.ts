@@ -1,5 +1,6 @@
-import { BackgroundMessage, Fees } from "../../custom_typing/types";
-import { sendMessage } from "../utils/utils";
+import { sendMessage } from "@coreUtils/utils";
+import { BackgroundMessage, Fees } from "@models/types";
+
 import { getSocketUrl } from "./utils/utils";
 
 const OFFSCREEN_DOCUMENT_NAME = "offScreen.html";
