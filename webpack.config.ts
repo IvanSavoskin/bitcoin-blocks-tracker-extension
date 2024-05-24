@@ -106,7 +106,7 @@ const webpack_ = (_: any, argv: any) => {
                     ]
                 },
                 {
-                    test: /\.m4a$/,
+                    test: /\.(m4a|svg)$/,
                     type: "asset/resource",
                     generator: {
                         filename: "../static/assets/[name]-[contenthash][ext]"
@@ -115,7 +115,7 @@ const webpack_ = (_: any, argv: any) => {
             ]
         },
         resolve: {
-            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a"]
+            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a", ".svg"]
         },
         plugins: [
             new CleanWebpackPlugin({
