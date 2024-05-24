@@ -21,7 +21,7 @@ export const PATHS = {
     nodeModules: path.resolve(__dirname, "./node_modules")
 };
 
-const webpack_ = (env: any, argv: any) => {
+const webpack_ = (_: any, argv: any) => {
     const isProduction = argv.mode === "production";
 
     return {
@@ -85,6 +85,15 @@ const webpack_ = (env: any, argv: any) => {
                                     auto: true,
                                     localIdentName: isProduction ? "[hash:base64]" : "[path][name]__[local]",
                                     exportLocalsConvention: "camelCaseOnly"
+                                }
+                            }
+                        },
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                sourceMap: true,
+                                postcssOptions: {
+                                    config: path.resolve(__dirname, "postcss.config.js")
                                 }
                             }
                         },
