@@ -1,10 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Fees, FeesPopupMessage, PopupMessage } from "../../../custom_typing/types";
-import { sendMessage } from "../../utils/utils";
+import { sendMessage } from "@coreUtils//utils";
+import { Fees, FeesPopupMessage, PopupMessage } from "@models/types";
+
 import styles from "./styles/FeeInfo.module.scss";
+import mainStyles from "./styles/Main.module.scss";
 
-export default function FeeInfo() {
+interface FeeInfoProps {
+    isTrackingEnabled: boolean;
+}
+
+export default function FeeInfo({ isTrackingEnabled }: FeeInfoProps) {
+    const noDataText = isTrackingEnabled ? "Loading..." : "Block tracking is disabled";
+
     const [fees, setFees] = useState<Fees | null>();
 
     const updateFees = useCallback((message: PopupMessage) => {
@@ -31,7 +39,7 @@ export default function FeeInfo() {
 
     return (
         <div>
-            <h2>Fees info</h2>
+            <h2 className={mainStyles.header}>Fees info</h2>
             {fees ? (
                 <div className={styles.container}>
                     <span>Slow</span>
@@ -51,7 +59,7 @@ export default function FeeInfo() {
                     </div>
                 </div>
             ) : (
-                <div className={styles.loading}>Loading...</div>
+                <div className={styles.loading}>{noDataText}</div>
             )}
         </div>
     );

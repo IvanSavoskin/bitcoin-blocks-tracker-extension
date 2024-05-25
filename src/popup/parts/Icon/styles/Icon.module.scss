@@ -1,0 +1,24 @@
+.icon {
+  cursor: pointer;
+
+  &-link {
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}
+
+.small {
+  height: 14px;
+  width: 14px;
+}
+
+.medium {
+  height: 18px;
+  width: 18px;
+}
+
+.large {
+  height: 24px;
+  width: 24px;
+}

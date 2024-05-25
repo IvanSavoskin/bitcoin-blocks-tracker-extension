@@ -1,0 +1,11 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+}
+
+.control-container {
+  column-gap: 10px;
+  display: flex;
+}

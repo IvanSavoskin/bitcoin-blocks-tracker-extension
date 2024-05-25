@@ -23,14 +23,31 @@ export interface RequestLastBlockInfoBackgroundMessage extends Message {
     type: "requestLastBlockInfo";
 }
 
-export type BackgroundMessage = BaseBackgroundMessage | RequestFeesBackgroundMessage | RequestLastBlockInfoBackgroundMessage;
-
-export interface OffscreenMessage extends Message {
-    target: "offscreen";
-    type: "playAudio";
+export interface ChangeBlockNotificationSoundVolumeOffscreenMessage extends Message {
+    data: {
+        volume: number;
+    };
+    target: "background";
+    type: "changeBlockNotificationSoundVolume";
 }
 
-interface FeesPopupMessage extends Message {
+export type BackgroundMessage =
+    | BaseBackgroundMessage
+    | RequestFeesBackgroundMessage
+    | RequestLastBlockInfoBackgroundMessage
+    | ChangeBlockNotificationSoundVolumeOffscreenMessage;
+
+export interface PlayBlockNotificationSoundOffscreenMessage extends Message {
+    data: {
+        volume: number;
+    };
+    target: "offscreen";
+    type: "playBlockNotificationSound";
+}
+
+export type OffscreenMessage = PlayBlockNotificationSoundOffscreenMessage;
+
+export interface FeesPopupMessage extends Message {
     data: {
         fees: Fees;
     };
@@ -38,7 +55,7 @@ interface FeesPopupMessage extends Message {
     type: "fees" | "initialFees";
 }
 
-interface BlockPopupMessage extends Message {
+export interface BlockPopupMessage extends Message {
     data: {
         blockInfo: BlockInfo;
     };

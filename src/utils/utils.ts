@@ -1,4 +1,4 @@
-import { Message } from "../../custom_typing/types";
+import { Message } from "../models/types";
 
 export async function sendMessage(message: Message): Promise<any> {
     try {

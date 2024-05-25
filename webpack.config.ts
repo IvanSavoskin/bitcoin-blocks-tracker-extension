@@ -21,7 +21,7 @@ export const PATHS = {
     nodeModules: path.resolve(__dirname, "./node_modules")
 };
 
-const webpack_ = (env: any, argv: any) => {
+const webpack_ = (_: any, argv: any) => {
     const isProduction = argv.mode === "production";
 
     return {
@@ -89,6 +89,15 @@ const webpack_ = (env: any, argv: any) => {
                             }
                         },
                         {
+                            loader: "postcss-loader",
+                            options: {
+                                sourceMap: true,
+                                postcssOptions: {
+                                    config: path.resolve(__dirname, "postcss.config.js")
+                                }
+                            }
+                        },
+                        {
                             loader: "sass-loader",
                             options: {
                                 sourceMap: !isProduction
@@ -97,7 +106,7 @@ const webpack_ = (env: any, argv: any) => {
                     ]
                 },
                 {
-                    test: /\.m4a$/,
+                    test: /\.(m4a|svg)$/,
                     type: "asset/resource",
                     generator: {
                         filename: "../static/assets/[name]-[contenthash][ext]"
@@ -106,7 +115,16 @@ const webpack_ = (env: any, argv: any) => {
             ]
         },
         resolve: {
-            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a"]
+            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a", ".svg"],
+            alias: {
+                "@settings": path.resolve(__dirname, "src/popup/components/Settings"),
+                "@main": path.resolve(__dirname, "src/popup/components/Main"),
+                "@parts": path.resolve(__dirname, "src/popup/parts"),
+                "@static": path.resolve(__dirname, "src/static"),
+                "@coreUtils": path.resolve(__dirname, "src/utils"),
+                "@hooks": path.resolve(__dirname, "src/utils/hooks"),
+                "@models": path.resolve(__dirname, "src/models")
+            }
         },
         plugins: [
             new CleanWebpackPlugin({

@@ -15,8 +15,18 @@
         "rootDir": "src",
         "outDir": "dist/js",
         "noEmitOnError": true,
-        "jsx": "react",
-        "typeRoots": [ "node_modules/@types", "./custom_typing"]
+        "jsx": "react-jsx",
+        "typeRoots": [ "node_modules/@types", "./custom_typing"],
+        "baseUrl": "src",
+        "paths": {
+            "@settings/*": ["popup/components/Settings/*"],
+            "@main/*": ["popup/components/Main/*"],
+            "@parts/*": ["popup/parts/*"],
+            "@static/*": ["static/*"],
+            "@coreUtils/*": ["utils/*"],
+            "@hooks/*": ["utils/hooks/*"],
+            "@models/*": ["models/*"]
+        }
     },
     "include": [
         "./src/**/*",
