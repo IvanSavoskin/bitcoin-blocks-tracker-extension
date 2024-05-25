@@ -30,8 +30,8 @@ export default function Main() {
                 setIsMainnet={setIsMainnet}
                 isMainnet={isMainnet}
             />
-            <FeeInfo />
-            <LastBlockInfo />
+            <FeeInfo isTrackingEnabled={isTrackingEnabled} />
+            <LastBlockInfo isTrackingEnabled={isTrackingEnabled} />
         </>
     );
 }

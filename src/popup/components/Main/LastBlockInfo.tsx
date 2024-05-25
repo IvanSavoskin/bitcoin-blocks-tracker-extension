@@ -6,7 +6,13 @@ import { BlockInfo, BlockPopupMessage, PopupMessage } from "@models/types";
 import styles from "./styles/LastBlockInfo.module.scss";
 import mainStyles from "./styles/Main.module.scss";
 
-export default function LastBlockInfo() {
+interface LastBlockInfoProps {
+    isTrackingEnabled: boolean;
+}
+
+export default function LastBlockInfo({ isTrackingEnabled }: LastBlockInfoProps) {
+    const noDataText = isTrackingEnabled ? "Loading..." : "Block tracking is disabled";
+
     const [lastBlockInfo, setLastBlockInfo] = useState<BlockInfo | null>();
     const [currentDate, setCurrentDate] = useState<number>(Date.now());
 
@@ -61,7 +67,7 @@ export default function LastBlockInfo() {
                     </div>
                 </div>
             ) : (
-                <div className={styles.loading}>Loading...</div>
+                <div className={styles.loading}>{noDataText}</div>
             )}
         </div>
     );

@@ -6,7 +6,13 @@ import { Fees, FeesPopupMessage, PopupMessage } from "@models/types";
 import styles from "./styles/FeeInfo.module.scss";
 import mainStyles from "./styles/Main.module.scss";
 
-export default function FeeInfo() {
+interface FeeInfoProps {
+    isTrackingEnabled: boolean;
+}
+
+export default function FeeInfo({ isTrackingEnabled }: FeeInfoProps) {
+    const noDataText = isTrackingEnabled ? "Loading..." : "Block tracking is disabled";
+
     const [fees, setFees] = useState<Fees | null>();
 
     const updateFees = useCallback((message: PopupMessage) => {
@@ -53,7 +59,7 @@ export default function FeeInfo() {
                     </div>
                 </div>
             ) : (
-                <div className={styles.loading}>Loading...</div>
+                <div className={styles.loading}>{noDataText}</div>
             )}
         </div>
     );

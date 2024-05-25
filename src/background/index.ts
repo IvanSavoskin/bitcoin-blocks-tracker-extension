@@ -192,6 +192,17 @@ function disableBlocksTracking(): void {
         }
     });
     socket?.close(1000, "Disabling blocks tracking");
+
+    fees = null;
+    lastBlockTime = null;
+    lastBlockHeight = null;
+
+    sendMessage({
+        target: "popup",
+        data: { blockInfo: { lastBlockTime, lastBlockHeight } },
+        type: "blockInfo"
+    });
+    sendMessage({ target: "popup", data: { fees }, type: "fees" });
 }
 
 chrome.storage.local.get(["isTrackingEnabled", "isMainnet"]).then((result) => {
