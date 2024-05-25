@@ -19,7 +19,7 @@ export default function Main() {
     }, []);
 
     return (
-        <div>
+        <>
             <TrackingRadioButtonGroup
                 isTrackingEnabled={isTrackingEnabled}
                 setTrackingEnabled={setIsTrackingEnabled}
@@ -32,6 +32,6 @@ export default function Main() {
             />
             <FeeInfo />
             <LastBlockInfo />
-        </div>
+        </>
     );
 }

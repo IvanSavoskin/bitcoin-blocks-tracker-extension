@@ -1,4 +1,6 @@
 import { sendMessage } from "@coreUtils/utils";
+
+import mainStyles from "./styles/Main.module.scss";
 import styles from "./styles/RadioButtons.module.scss";
 
 interface TrackingRadioButtonGroupProps {
@@ -27,7 +29,7 @@ export default function TrackingRadioButtonGroup({
 
     return (
         <div>
-            <h2>Blocks tracking enabled</h2>
+            <h2 className={mainStyles.header}>Blocks tracking enabled</h2>
             <div className={styles.formToggle}>
                 <div className={styles.formToggleItemLeft}>
                     <input

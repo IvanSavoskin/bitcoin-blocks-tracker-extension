@@ -4,6 +4,7 @@ import { sendMessage } from "@coreUtils/utils";
 import { BlockInfo, BlockPopupMessage, PopupMessage } from "@models/types";
 
 import styles from "./styles/LastBlockInfo.module.scss";
+import mainStyles from "./styles/Main.module.scss";
 
 export default function LastBlockInfo() {
     const [lastBlockInfo, setLastBlockInfo] = useState<BlockInfo | null>();
@@ -43,7 +44,7 @@ export default function LastBlockInfo() {
 
     return (
         <div>
-            <h2>Last block info</h2>
+            <h2 className={mainStyles.header}>Last block info</h2>
             {lastBlockInfo?.lastBlockTime && lastBlockInfo?.lastBlockHeight ? (
                 <div className={styles.container}>
                     <div className={styles.item}>
