@@ -1,0 +1,22 @@
+.container {
+  background: #fff;
+  display: flex;
+  height: 100%;
+  left: 0;
+  opacity: 1;
+  position: absolute;
+  top: 0;
+  transition: visibility 0s, opacity 0.2s linear;
+  visibility: visible;
+  width: 100%;
+  
+  &-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.content {
+  position: relative;
+  width: 100%;
+}

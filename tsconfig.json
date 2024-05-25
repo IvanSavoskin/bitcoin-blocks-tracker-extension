@@ -19,9 +19,12 @@
         "typeRoots": [ "node_modules/@types", "./custom_typing"],
         "baseUrl": "src",
         "paths": {
+            "@settings/*": ["popup/components/Settings/*"],
             "@main/*": ["popup/components/Main/*"],
+            "@parts/*": ["popup/parts/*"],
             "@static/*": ["static/*"],
             "@coreUtils/*": ["utils/*"],
+            "@hooks/*": ["utils/hooks/*"],
             "@models/*": ["models/*"]
         }
     },

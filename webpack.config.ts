@@ -117,10 +117,13 @@ const webpack_ = (_: any, argv: any) => {
         resolve: {
             extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a", ".svg"],
             alias: {
-                "@main/*": path.resolve(__dirname, "src/popup/components/Main"),
-                "@static/*": path.resolve(__dirname, "src/static"),
-                "@coreUtils/*": path.resolve(__dirname, "src/utils"),
-                "@models/*": path.resolve(__dirname, "src/models")
+                "@settings": path.resolve(__dirname, "src/popup/components/Settings"),
+                "@main": path.resolve(__dirname, "src/popup/components/Main"),
+                "@parts": path.resolve(__dirname, "src/popup/parts"),
+                "@static": path.resolve(__dirname, "src/static"),
+                "@coreUtils": path.resolve(__dirname, "src/utils"),
+                "@hooks": path.resolve(__dirname, "src/utils/hooks"),
+                "@models": path.resolve(__dirname, "src/models")
             }
         },
         plugins: [

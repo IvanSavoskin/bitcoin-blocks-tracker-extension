@@ -12,6 +12,7 @@ let intervalId: NodeJS.Timer | null;
 let fees: Fees | null;
 let lastBlockTime: number | null;
 let lastBlockHeight: number | null;
+let blockNotificationVolume: number = 100;
 
 async function checkOffscreenDocumentExist(): Promise<boolean> {
     // Check all windows controlled by the service worker to see if one
@@ -48,6 +49,10 @@ function onOpenSocketHandler(): void {
     console.debug("Send data to server");
     socket?.send(JSON.stringify({ action: "init" }));
     socket?.send(JSON.stringify({ action: "want", data: ["blocks", "stats"] }));
+
+    chrome.storage.local.get(["blockNotificationVolume"]).then((result) => {
+        blockNotificationVolume = result.blockNotificationVolume ?? 100;
+    });
 }
 
 function onCloseSocketWithReconnectHandler(event: CloseEvent, websocketUrl: string): void {
@@ -88,7 +93,7 @@ function onBlockMessageHandler(eventData: any): void {
         console.info("New block");
         setupOffscreenDocument().then(() => {
             console.debug("Send block notification method to offscreen");
-            sendMessage({ target: "offscreen", type: "playAudio" });
+            sendMessage({ data: { volume: blockNotificationVolume }, target: "offscreen", type: "playBlockNotificationSound" });
         });
 
         lastBlockTime = eventData.block.timestamp * 1000;
@@ -232,5 +237,13 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage, sender, sendRe
             data: { blockInfo: { lastBlockTime, lastBlockHeight } },
             type: "initialBlockInfo"
         });
+    }
+});
+
+chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
+    if (message.target === "background" && message.type === "changeBlockNotificationSoundVolume") {
+        console.debug("Change block notification sound volume");
+
+        blockNotificationVolume = message.data.volume;
     }
 });
