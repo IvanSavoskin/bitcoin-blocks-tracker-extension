@@ -1,0 +1,17 @@
+.input-container {
+  column-gap: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.icons-container {
+  column-gap: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.error-message {
+  color: #af000e;
+  font-weight: bold;
+}

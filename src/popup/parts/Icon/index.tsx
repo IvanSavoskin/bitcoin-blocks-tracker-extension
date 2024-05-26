@@ -14,6 +14,7 @@ interface IconProps {
     onClick?: () => void;
     link?: boolean;
     containerClassName?: string;
+    disabled?: boolean;
 }
 
 function getIconSizeClass(size: IconSize) {
@@ -31,10 +32,24 @@ function getIconSizeClass(size: IconSize) {
     }
 }
 
-export default function Icon({ src, size = IconSize.MEDIUM, onClick, link = false, containerClassName }: IconProps) {
+export default function Icon({ src, size = IconSize.MEDIUM, onClick, link = false, containerClassName, disabled = false }: IconProps) {
+    const onIconClick = () => {
+        if (!disabled) {
+            onClick?.();
+        }
+    };
+
     return (
-        <div onClick={onClick} role="button" className={classNames(containerClassName)} tabIndex={0} onKeyDown={onClick}>
-            <img className={classNames(styles.icon, getIconSizeClass(size), { [styles.iconLink]: link })} src={src} alt="icon" />
+        <div onClick={onIconClick} role="button" className={classNames(containerClassName)} tabIndex={0} onKeyDown={onClick}>
+            <img
+                className={classNames(getIconSizeClass(size), {
+                    [styles.icon]: !disabled,
+                    [styles.iconLink]: link && !disabled,
+                    [styles.iconDisabled]: disabled
+                })}
+                src={src}
+                alt="icon"
+            />
         </div>
     );
 }

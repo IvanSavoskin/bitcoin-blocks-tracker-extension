@@ -2,10 +2,17 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  row-gap: 7px;
+  row-gap: 15px;
 }
 
-.control-container {
-  column-gap: 10px;
+.label {
+  font-weight: bold;
+}
+
+.item-container {
+  align-items: center;
   display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  width: 100%;
 }

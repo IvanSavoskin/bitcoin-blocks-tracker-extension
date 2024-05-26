@@ -1,4 +1,5 @@
 import { sendMessage } from "@coreUtils/utils";
+import { BaseBackgroundMessage } from "@models/types";
 
 import mainStyles from "./styles/Main.module.scss";
 import styles from "./styles/RadioButtons.module.scss";
@@ -16,7 +17,7 @@ export default function TrackingRadioButtonGroup({
 }: Readonly<TrackingRadioButtonGroupProps>) {
     const changeTracking = (isEnabled: boolean) => {
         setTrackingEnabled(isEnabled);
-        sendMessage({
+        sendMessage<BaseBackgroundMessage>({
             target: "background",
             data: {
                 enabled: isEnabled,

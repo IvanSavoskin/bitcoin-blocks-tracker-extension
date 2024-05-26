@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { sendMessage } from "@coreUtils//utils";
-import { Fees, FeesPopupMessage, PopupMessage } from "@models/types";
+import { Fees, FeesPopupMessage, PopupMessage, RequestFeesBackgroundMessage } from "@models/types";
 
 import styles from "./styles/FeeInfo.module.scss";
 import mainStyles from "./styles/Main.module.scss";
@@ -23,7 +23,7 @@ export default function FeeInfo({ isTrackingEnabled }: FeeInfoProps) {
 
     useEffect(() => {
         if (!fees) {
-            sendMessage({
+            sendMessage<RequestFeesBackgroundMessage>({
                 target: "background",
                 type: "requestFees"
             }).then((message: FeesPopupMessage) => {

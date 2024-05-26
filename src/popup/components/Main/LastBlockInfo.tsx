@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { sendMessage } from "@coreUtils/utils";
-import { BlockInfo, BlockPopupMessage, PopupMessage } from "@models/types";
+import { BlockInfo, BlockPopupMessage, PopupMessage, RequestLastBlockInfoBackgroundMessage } from "@models/types";
 
 import styles from "./styles/LastBlockInfo.module.scss";
 import mainStyles from "./styles/Main.module.scss";
@@ -32,7 +32,7 @@ export default function LastBlockInfo({ isTrackingEnabled }: LastBlockInfoProps)
 
     useEffect(() => {
         if (!lastBlockInfo) {
-            sendMessage({
+            sendMessage<RequestLastBlockInfoBackgroundMessage>({
                 target: "background",
                 type: "requestLastBlockInfo"
             }).then((message: BlockPopupMessage) => {
