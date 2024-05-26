@@ -1,6 +1,6 @@
-import { Message } from "../models/types";
+import { Message } from "@models/types";
 
-export async function sendMessage(message: Message): Promise<any> {
+export async function sendMessage<T extends Message>(message: T): Promise<any> {
     try {
         return await chrome.runtime.sendMessage(message);
     } catch (error) {

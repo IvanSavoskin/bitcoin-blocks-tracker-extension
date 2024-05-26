@@ -1,5 +1,11 @@
 import { sendMessage } from "@coreUtils/utils";
-import { BackgroundMessage, Fees } from "@models/types";
+import {
+    BackgroundMessage,
+    BlockPopupMessage,
+    Fees,
+    FeesPopupMessage,
+    PlayBlockNotificationSoundOffscreenMessage
+} from "@models/types";
 
 import { getSocketUrl } from "./utils/utils";
 
@@ -13,6 +19,7 @@ let fees: Fees | null;
 let lastBlockTime: number | null;
 let lastBlockHeight: number | null;
 let blockNotificationVolume: number = 100;
+let blockNotificationSound: string | null = null;
 
 async function checkOffscreenDocumentExist(): Promise<boolean> {
     // Check all windows controlled by the service worker to see if one
@@ -50,8 +57,9 @@ function onOpenSocketHandler(): void {
     socket?.send(JSON.stringify({ action: "init" }));
     socket?.send(JSON.stringify({ action: "want", data: ["blocks", "stats"] }));
 
-    chrome.storage.local.get(["blockNotificationVolume"]).then((result) => {
+    chrome.storage.local.get(["blockNotificationVolume", "blockNotificationSound"]).then((result) => {
         blockNotificationVolume = result.blockNotificationVolume ?? 100;
+        blockNotificationSound = result.blockNotificationSound;
     });
 }
 
@@ -93,7 +101,11 @@ function onBlockMessageHandler(eventData: any): void {
         console.info("New block");
         setupOffscreenDocument().then(() => {
             console.debug("Send block notification method to offscreen");
-            sendMessage({ data: { volume: blockNotificationVolume }, target: "offscreen", type: "playBlockNotificationSound" });
+            sendMessage<PlayBlockNotificationSoundOffscreenMessage>({
+                data: { volume: blockNotificationVolume, sound: blockNotificationSound },
+                target: "offscreen",
+                type: "playBlockNotificationSound"
+            });
         });
 
         lastBlockTime = eventData.block.timestamp * 1000;
@@ -101,7 +113,7 @@ function onBlockMessageHandler(eventData: any): void {
 
         console.debug("Update blocks info with new block");
 
-        sendMessage({
+        sendMessage<BlockPopupMessage>({
             target: "popup",
             data: { blockInfo: { lastBlockTime, lastBlockHeight } },
             type: "blockInfo"
@@ -116,7 +128,7 @@ function onFeesMessageHandler(eventData: any): void {
     if ("fees" in eventData) {
         console.debug("Fee updated");
         fees = eventData.fees;
-        sendMessage({ target: "popup", data: { fees }, type: "fees" });
+        sendMessage<FeesPopupMessage>({ target: "popup", data: { fees }, type: "fees" });
 
         console.info(`Current fees: slow: ${fees?.hourFee}, medium: ${fees?.halfHourFee}, fast: ${fees?.fastestFee}`);
     }
@@ -129,7 +141,7 @@ function onBlocksMessageHandler(eventData: any): void {
         const lastBlock = eventData.blocks.at(-1);
         lastBlockHeight = lastBlock.height;
         lastBlockTime = lastBlock.timestamp * 1000;
-        sendMessage({
+        sendMessage<BlockPopupMessage>({
             target: "popup",
             data: { blockInfo: { lastBlockTime, lastBlockHeight } },
             type: "blockInfo"
@@ -197,12 +209,12 @@ function disableBlocksTracking(): void {
     lastBlockTime = null;
     lastBlockHeight = null;
 
-    sendMessage({
+    sendMessage<BlockPopupMessage>({
         target: "popup",
         data: { blockInfo: { lastBlockTime, lastBlockHeight } },
         type: "blockInfo"
     });
-    sendMessage({ target: "popup", data: { fees }, type: "fees" });
+    sendMessage<FeesPopupMessage>({ target: "popup", data: { fees }, type: "fees" });
 }
 
 chrome.storage.local.get(["isTrackingEnabled", "isMainnet"]).then((result) => {
@@ -231,7 +243,7 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
     }
 });
 
-chrome.runtime.onMessage.addListener((message: BackgroundMessage, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: BackgroundMessage, _, sendResponse) => {
     if (message.target === "background" && message.type === "requestFees") {
         console.debug("Send initial fees info");
 
@@ -239,7 +251,7 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage, sender, sendRe
     }
 });
 
-chrome.runtime.onMessage.addListener((message: BackgroundMessage, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: BackgroundMessage, _, sendResponse) => {
     if (message.target === "background" && message.type === "requestLastBlockInfo") {
         console.debug("Send initial last block info");
 
@@ -256,5 +268,13 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
         console.debug("Change block notification sound volume");
 
         blockNotificationVolume = message.data.volume;
+    }
+});
+
+chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
+    if (message.target === "background" && message.type === "changeBlockNotificationSound") {
+        console.debug("Change block notification sound");
+
+        blockNotificationSound = message.data.sound;
     }
 });
