@@ -1,6 +1,6 @@
 {
   "name": "mempool-space-block-tracker-chrome-extenstion",
-  "version": "1.1.0-beta.2",
+  "version": "1.1.0",
   "description": "Chrome extension to track new bitcoin blocks via Mempool Space",
   "scripts": {
     "dev": "webpack --watch --progress --mode=development",

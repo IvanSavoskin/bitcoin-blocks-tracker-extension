@@ -4,14 +4,17 @@ import { createRoot } from "react-dom/client";
 import Main from "@main/index";
 import Settings from "@settings/index";
 
+import WithMainContext from "./context/WithMainContext";
 import styles from "./styles/Popup.module.scss";
 
 function Popup() {
     return (
-        <div className={styles.container}>
-            <Settings />
-            <Main />
-        </div>
+        <WithMainContext>
+            <div className={styles.container}>
+                <Settings />
+                <Main />
+            </div>
+        </WithMainContext>
     );
 }
 

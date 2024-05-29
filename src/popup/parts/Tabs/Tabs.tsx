@@ -13,7 +13,7 @@ interface TabsProps {
 }
 
 export default function Tabs({ children, activeTabIndex, onChangeActiveTab, className }: PropsWithChildren<TabsProps>) {
-    const [activeTab, setActiveTab] = useState(activeTabIndex ?? 0);
+    const [activeTab, setActiveTab] = useState(activeTabIndex || 0);
 
     const handleTabClick = (index: number) => {
         if (onChangeActiveTab) {
@@ -23,10 +23,10 @@ export default function Tabs({ children, activeTabIndex, onChangeActiveTab, clas
     };
 
     useEffect(() => {
-        if (activeTabIndex !== undefined) {
+        if (activeTabIndex !== undefined && onChangeActiveTab) {
             setActiveTab(activeTabIndex);
         }
-    }, [activeTabIndex]);
+    }, [activeTabIndex, onChangeActiveTab]);
 
     const tabs = Children.toArray(children).filter(
         (child): child is ReactElement<TabItemProps> => isValidElement(child) && child.type === TabItem
@@ -54,7 +54,7 @@ export default function Tabs({ children, activeTabIndex, onChangeActiveTab, clas
                     ))}
                 </ul>
             </nav>
-            {tabs[activeTab]}
+            {tabs[activeTab || 0]}
         </div>
     );
 }

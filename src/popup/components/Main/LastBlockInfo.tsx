@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useIsTrackingEnabled } from "@context/MainContext";
 import { sendMessage } from "@coreUtils/utils";
 import { BlockInfo, BlockPopupMessage, PopupMessage, RequestLastBlockInfoBackgroundMessage } from "@models/types";
 
 import styles from "./styles/LastBlockInfo.module.scss";
 import mainStyles from "./styles/Main.module.scss";
 
-interface LastBlockInfoProps {
-    isTrackingEnabled: boolean;
-}
+export default function LastBlockInfo() {
+    const isTrackingEnabled = useIsTrackingEnabled();
 
-export default function LastBlockInfo({ isTrackingEnabled }: LastBlockInfoProps) {
-    const noDataText = isTrackingEnabled ? "Loading..." : "Block tracking is disabled";
+    const noDataText = isTrackingEnabled ? "Loading..." : "Tracking is disabled";
 
     const [lastBlockInfo, setLastBlockInfo] = useState<BlockInfo | null>();
     const [currentDate, setCurrentDate] = useState<number>(Date.now());

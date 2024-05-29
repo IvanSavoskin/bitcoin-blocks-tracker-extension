@@ -4,13 +4,20 @@ export interface Message {
     type: string;
 }
 
-export interface BaseBackgroundMessage extends Message {
+export interface ChangeBlockNotificationEnabledBackgroundMessage extends Message {
     data: {
         enabled: boolean;
+    };
+    target: "background";
+    type: "changeBlockNotificationEnabled";
+}
+
+export interface ChangeBlockchainBackgroundMessage extends Message {
+    data: {
         isMainnet: boolean;
     };
     target: "background";
-    type: "changeEnabled" | "changeBlockchain";
+    type: "changeBlockchain";
 }
 
 export interface RequestFeesBackgroundMessage extends Message {
@@ -23,39 +30,58 @@ export interface RequestLastBlockInfoBackgroundMessage extends Message {
     type: "requestLastBlockInfo";
 }
 
-export interface ChangeBlockNotificationSoundVolumeBackgroundMessage extends Message {
+export interface ChangeNotificationSoundVolumeBackgroundMessage extends Message {
     data: {
         volume: number;
     };
     target: "background";
-    type: "changeBlockNotificationSoundVolume";
+    type: "changeBlockNotificationSoundVolume" | "changeFeeNotificationSoundVolume";
 }
 
-export interface ChangeBlockNotificationSoundBackgroundMessage extends Message {
+export interface ChangeNotificationSoundBackgroundMessage extends Message {
     data: {
         sound: string | null;
     };
     target: "background";
-    type: "changeBlockNotificationSound";
+    type: "changeBlockNotificationSound" | "changeFeeNotificationSound";
+}
+
+export interface ChangeNotificationBorderBackgroundMessage extends Message {
+    data: {
+        feeBorder: FeeNotificationBorder | null;
+    };
+    target: "background";
+    type: "changeFeeNotificationBorder";
+}
+
+export interface ChangeFeeNotificationEnabledBackgroundMessage extends Message {
+    data: {
+        enabled: boolean;
+    };
+    target: "background";
+    type: "changeFeeNotificationEnabled";
 }
 
 export type BackgroundMessage =
-    | BaseBackgroundMessage
+    | ChangeBlockNotificationEnabledBackgroundMessage
+    | ChangeBlockchainBackgroundMessage
     | RequestFeesBackgroundMessage
     | RequestLastBlockInfoBackgroundMessage
-    | ChangeBlockNotificationSoundVolumeBackgroundMessage
-    | ChangeBlockNotificationSoundBackgroundMessage;
+    | ChangeNotificationSoundVolumeBackgroundMessage
+    | ChangeNotificationSoundBackgroundMessage
+    | ChangeNotificationBorderBackgroundMessage
+    | ChangeFeeNotificationEnabledBackgroundMessage;
 
-export interface PlayBlockNotificationSoundOffscreenMessage extends Message {
+export interface PlayNotificationSoundOffscreenMessage extends Message {
     data: {
         volume: number;
         sound: string | null;
     };
     target: "offscreen";
-    type: "playBlockNotificationSound";
+    type: "playBlockNotificationSound" | "playFeeNotificationSound";
 }
 
-export type OffscreenMessage = PlayBlockNotificationSoundOffscreenMessage;
+export type OffscreenMessage = PlayNotificationSoundOffscreenMessage;
 
 export interface FeesPopupMessage extends Message {
     data: {
@@ -86,4 +112,15 @@ export interface Fees {
 export interface BlockInfo {
     lastBlockHeight: number | null;
     lastBlockTime: number | null;
+}
+
+export enum FeeLevel {
+    SLOW = "hourFee",
+    MEDIUM = "halfHourFee",
+    FAST = "fastestFee"
+}
+
+export interface FeeNotificationBorder {
+    feeBorder: number | null;
+    feeLevel: FeeLevel;
 }

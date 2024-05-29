@@ -23,7 +23,7 @@ export default function SettingsContent({ isVisible, onClose }: SettingsContentP
                     containerClassName={settingsStyles.iconContainer}
                     size={IconSize.SMALL}
                 />
-                <SettingsTabs />
+                {isVisible && <SettingsTabs />}
             </div>
         </div>
     );
