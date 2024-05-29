@@ -1,10 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Fees, FeesPopupMessage, PopupMessage } from "../../../custom_typing/types";
-import { sendMessage } from "../../utils/utils";
+import { useIsTrackingEnabled } from "@context/MainContext";
+import { sendMessage } from "@coreUtils//utils";
+import { Fees, FeesPopupMessage, PopupMessage, RequestFeesBackgroundMessage } from "@models/types";
+
 import styles from "./styles/FeeInfo.module.scss";
+import mainStyles from "./styles/Main.module.scss";
 
 export default function FeeInfo() {
+    const isTrackingEnabled = useIsTrackingEnabled();
+
+    const noDataText = isTrackingEnabled ? "Loading..." : "Tracking is disabled";
+
     const [fees, setFees] = useState<Fees | null>();
 
     const updateFees = useCallback((message: PopupMessage) => {
@@ -15,7 +22,7 @@ export default function FeeInfo() {
 
     useEffect(() => {
         if (!fees) {
-            sendMessage({
+            sendMessage<RequestFeesBackgroundMessage>({
                 target: "background",
                 type: "requestFees"
             }).then((message: FeesPopupMessage) => {
@@ -31,7 +38,7 @@ export default function FeeInfo() {
 
     return (
         <div>
-            <h2>Fees info</h2>
+            <h2 className={mainStyles.header}>Fees info</h2>
             {fees ? (
                 <div className={styles.container}>
                     <span>Slow</span>
@@ -51,7 +58,7 @@ export default function FeeInfo() {
                     </div>
                 </div>
             ) : (
-                <div className={styles.loading}>Loading...</div>
+                <div className={styles.loading}>{noDataText}</div>
             )}
         </div>
     );

@@ -1,35 +1,37 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
-import { sendMessage } from "../../utils/utils";
+import { sendMessage } from "@coreUtils/utils";
+import { ChangeBlockchainBackgroundMessage } from "@models/types";
+
+import mainStyles from "./styles/Main.module.scss";
 import styles from "./styles/RadioButtons.module.scss";
 
-interface TrackingRadioButtonGroupProps {
-    isMainnet: boolean;
-    setIsMainnet: (isMainnet: boolean) => void;
-    isTrackingEnabled: boolean;
-}
+export default function ChangeBlockchainRadioButtonGroup() {
+    const [isMainnet, setIsMainnet] = useState(true);
 
-export default function ChangeBlockchainRadioButtonGroup({
-    isMainnet,
-    setIsMainnet,
-    isTrackingEnabled
-}: Readonly<TrackingRadioButtonGroupProps>) {
     const changeBlockchain = (_isMainnet: boolean) => {
         setIsMainnet(_isMainnet);
-        sendMessage({
+        sendMessage<ChangeBlockchainBackgroundMessage>({
             target: "background",
             data: {
-                enabled: isTrackingEnabled,
                 isMainnet: _isMainnet
             },
             type: "changeBlockchain"
         });
-        chrome.storage.local.set({ isMainnet: _isMainnet, isTrackingEnabled });
+        chrome.storage.local.set({ isMainnet: _isMainnet });
     };
+
+    useEffect(() => {
+        chrome.storage.local.get(["isMainnet"]).then((result) => {
+            setIsMainnet(result.isMainnet || true);
+        });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div>
-            <h2>Blockchain</h2>
+            <h2 className={mainStyles.header}>Blockchain</h2>
             <div className={styles.formToggle}>
                 <div className={styles.formToggleItemLeft}>
                     <input

@@ -1,0 +1,11 @@
+.label {
+  font-weight: bold;
+}
+
+.item-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  width: 100%;
+}

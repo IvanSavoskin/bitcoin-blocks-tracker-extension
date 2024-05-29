@@ -1,0 +1,45 @@
+.tab-nav {
+  overflow-x: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tab-list {
+  border-bottom: 2px solid #ddd;
+  color: #57606f;
+  display: flex;
+  font-weight: bold;
+  gap: 0.5em;
+  margin: 0;
+  min-width: 100%;
+  padding: 0;
+  width: fit-content;
+}
+
+.tab-list li {
+  display: block;
+  margin-bottom: -2px;
+}
+
+.tab-btn {
+  background-color: transparent;
+  border: 2px solid #ddd;
+  border-width: 0 0 2px;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0.75em 1em;
+  white-space: nowrap;
+
+  &-active {
+    border-color: #07c;
+    color: #07c;
+  }
+
+  &:not(.tab-btn-active):hover {
+    color: #222;
+  }
+}

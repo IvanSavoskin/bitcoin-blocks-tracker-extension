@@ -1,10 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { BlockInfo, BlockPopupMessage, PopupMessage } from "../../../custom_typing/types";
-import { sendMessage } from "../../utils/utils";
+import { useIsTrackingEnabled } from "@context/MainContext";
+import { sendMessage } from "@coreUtils/utils";
+import { BlockInfo, BlockPopupMessage, PopupMessage, RequestLastBlockInfoBackgroundMessage } from "@models/types";
+
 import styles from "./styles/LastBlockInfo.module.scss";
+import mainStyles from "./styles/Main.module.scss";
 
 export default function LastBlockInfo() {
+    const isTrackingEnabled = useIsTrackingEnabled();
+
+    const noDataText = isTrackingEnabled ? "Loading..." : "Tracking is disabled";
+
     const [lastBlockInfo, setLastBlockInfo] = useState<BlockInfo | null>();
     const [currentDate, setCurrentDate] = useState<number>(Date.now());
 
@@ -24,7 +31,7 @@ export default function LastBlockInfo() {
 
     useEffect(() => {
         if (!lastBlockInfo) {
-            sendMessage({
+            sendMessage<RequestLastBlockInfoBackgroundMessage>({
                 target: "background",
                 type: "requestLastBlockInfo"
             }).then((message: BlockPopupMessage) => {
@@ -42,7 +49,7 @@ export default function LastBlockInfo() {
 
     return (
         <div>
-            <h2>Last block info</h2>
+            <h2 className={mainStyles.header}>Last block info</h2>
             {lastBlockInfo?.lastBlockTime && lastBlockInfo?.lastBlockHeight ? (
                 <div className={styles.container}>
                     <div className={styles.item}>
@@ -59,7 +66,7 @@ export default function LastBlockInfo() {
                     </div>
                 </div>
             ) : (
-                <div className={styles.loading}>Loading...</div>
+                <div className={styles.loading}>{noDataText}</div>
             )}
         </div>
     );
