@@ -1,37 +1,24 @@
-import { useEffect, useState } from "react";
+import FeeNotificationRadioButtonGroup from "@main/FeeNotificationRadioButtonGroup";
 
+import BlockNotificationRadioButtonGroup from "./BlockNotificationRadioButtonGroup";
 import ChangeBlockchainRadioButtonGroup from "./ChangeBlockchainRadioButtonGroup";
 import FeeInfo from "./FeeInfo";
 import LastBlockInfo from "./LastBlockInfo";
-import TrackingRadioButtonGroup from "./TrackingRadioButtonGroup";
+import styles from "./styles/Main.module.scss";
 
 export default function Main() {
-    const [isMainnet, setIsMainnet] = useState(true);
-    const [isTrackingEnabled, setIsTrackingEnabled] = useState(false);
-
-    useEffect(() => {
-        chrome.storage.local.get(["isTrackingEnabled", "isMainnet"]).then((result) => {
-            setIsTrackingEnabled(result.isTrackingEnabled || false);
-            setIsMainnet(result.isMainnet || true);
-        });
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
         <>
-            <TrackingRadioButtonGroup
-                isTrackingEnabled={isTrackingEnabled}
-                setTrackingEnabled={setIsTrackingEnabled}
-                isMainnet={isMainnet}
-            />
-            <ChangeBlockchainRadioButtonGroup
-                isTrackingEnabled={isTrackingEnabled}
-                setIsMainnet={setIsMainnet}
-                isMainnet={isMainnet}
-            />
-            <FeeInfo isTrackingEnabled={isTrackingEnabled} />
-            <LastBlockInfo isTrackingEnabled={isTrackingEnabled} />
+            <div>
+                <h2 className={styles.header}>Tracking state</h2>
+                <div className={styles.trackingStateControllersContainer}>
+                    <BlockNotificationRadioButtonGroup />
+                    <FeeNotificationRadioButtonGroup />
+                </div>
+            </div>
+            <ChangeBlockchainRadioButtonGroup />
+            <FeeInfo />
+            <LastBlockInfo />
         </>
     );
 }

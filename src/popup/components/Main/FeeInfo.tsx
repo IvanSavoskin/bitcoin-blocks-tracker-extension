@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useIsTrackingEnabled } from "@context/MainContext";
 import { sendMessage } from "@coreUtils//utils";
 import { Fees, FeesPopupMessage, PopupMessage, RequestFeesBackgroundMessage } from "@models/types";
 
 import styles from "./styles/FeeInfo.module.scss";
 import mainStyles from "./styles/Main.module.scss";
 
-interface FeeInfoProps {
-    isTrackingEnabled: boolean;
-}
+export default function FeeInfo() {
+    const isTrackingEnabled = useIsTrackingEnabled();
 
-export default function FeeInfo({ isTrackingEnabled }: FeeInfoProps) {
-    const noDataText = isTrackingEnabled ? "Loading..." : "Block tracking is disabled";
+    const noDataText = isTrackingEnabled ? "Loading..." : "Tracking is disabled";
 
     const [fees, setFees] = useState<Fees | null>();
 

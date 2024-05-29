@@ -15,6 +15,7 @@ export const PATHS = {
     publicHtml: path.join(__dirname, "./public/html"),
     publicFiles: path.join(__dirname, "./public/files"),
     publicIcons: path.join(__dirname, "./public/icons"),
+    publicImages: path.join(__dirname, "./public/images"),
     dist: path.join(__dirname, "./dist"),
     distJs: path.join(__dirname, "./dist/js"),
     distIcons: path.join(__dirname, "./dist/icons"),
@@ -106,7 +107,7 @@ const webpack_ = (_: any, argv: any) => {
                     ]
                 },
                 {
-                    test: /\.(m4a|svg)$/,
+                    test: /\.(m4a|svg|wav|png)$/,
                     type: "asset/resource",
                     generator: {
                         filename: "../static/assets/[name]-[contenthash][ext]"
@@ -115,10 +116,11 @@ const webpack_ = (_: any, argv: any) => {
             ]
         },
         resolve: {
-            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a", ".svg"],
+            extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css", ".m4a", ".wav", ".svg", ".png"],
             alias: {
                 "@settings": path.resolve(__dirname, "src/popup/components/Settings"),
                 "@main": path.resolve(__dirname, "src/popup/components/Main"),
+                "@context": path.resolve(__dirname, "src/popup/context"),
                 "@parts": path.resolve(__dirname, "src/popup/parts"),
                 "@static": path.resolve(__dirname, "src/static"),
                 "@coreUtils": path.resolve(__dirname, "src/utils"),

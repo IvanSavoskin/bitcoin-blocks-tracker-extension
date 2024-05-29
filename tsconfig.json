@@ -21,6 +21,7 @@
         "paths": {
             "@settings/*": ["popup/components/Settings/*"],
             "@main/*": ["popup/components/Main/*"],
+            "@context/*": ["popup/context/*"],
             "@parts/*": ["popup/parts/*"],
             "@static/*": ["static/*"],
             "@coreUtils/*": ["utils/*"],
