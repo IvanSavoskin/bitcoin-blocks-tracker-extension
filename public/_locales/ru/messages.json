@@ -101,7 +101,7 @@
   "feeNotificationBorderInputPlaceholder": {
     "message": "Граница комиссии"
   },
-  "releaseNotesNotificationTitle": {
-    "message": "Нововведения"
+  "releaseNotesNotificationButton": {
+    "message": "Список изменений"
   }
 }

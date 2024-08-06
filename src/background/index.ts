@@ -34,25 +34,38 @@ chrome.runtime.onInstalled.addListener((details) => {
         if (details.reason === "update" && currentVersion !== details.previousVersion) {
             console.debug(`Updated version: ${currentVersion}. Send notification`);
 
+            let notificationID: string | undefined;
+
             const currentVersionReleaseNotes = releaseNotes[currentVersion];
 
             const uiLang = chrome.i18n.getUILanguage();
 
             if (currentVersionReleaseNotes) {
                 chrome.notifications.create(
-                    `release-notes-${currentVersion}`,
                     {
                         type: "basic",
                         iconUrl: logo,
-                        title: currentVersionReleaseNotes.title,
+                        title: uiLang === "ru" ? currentVersionReleaseNotes.title.ru : currentVersionReleaseNotes.title.en,
                         message: uiLang === "ru" ? currentVersionReleaseNotes.message.ru : currentVersionReleaseNotes.message.en,
-                        buttons: [{ title: translate("releaseNotesNotificationTitle") }]
+                        buttons: [{ title: translate("releaseNotesNotificationButton") }]
                     },
-                    () => {}
+                    (id) => {
+                        notificationID = id;
+                    }
                 );
 
                 chrome.notifications.onClicked.addListener(() => {
                     chrome.tabs.create({ url: currentVersionReleaseNotes.link });
+                });
+
+                chrome.notifications.onButtonClicked.addListener((_notificationId, buttonIndex) => {
+                    if (_notificationId === notificationID && buttonIndex === 0) {
+                        chrome.tabs.create({ url: currentVersionReleaseNotes.link });
+                    }
+
+                    if (notificationID !== undefined) {
+                        chrome.notifications.clear(notificationID);
+                    }
                 });
             } else {
                 console.debug(`Release notes for version "${currentVersion}" not found`);
