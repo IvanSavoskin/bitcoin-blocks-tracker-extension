@@ -1,12 +1,8 @@
-import { sendMessage } from "@coreUtils/utils";
-import {
-    BackgroundMessage,
-    BlockPopupMessage,
-    FeeNotificationBorder,
-    Fees,
-    FeesPopupMessage,
-    PlayNotificationSoundOffscreenMessage
-} from "@models/types";
+import { translate } from "@coreUtils/localeUtils";
+import { sendMessage } from "@coreUtils/messagesUtils";
+import { FeeNotificationBorder, Fees } from "@models/fee/types";
+import { BackgroundMessageType, MessageTarget, OffscreenMessageType, PopupMessageType } from "@models/messages/enums";
+import { BackgroundMessage, BlockPopupMessage, FeesPopupMessage, PlayNotificationSoundOffscreenMessage } from "@models/messages/types";
 import logo from "@static/images/logo.png";
 
 import { releaseNotes } from "./utils/releaseNotes";
@@ -28,6 +24,7 @@ let blockNotificationSound: string | null = null;
 
 let isFeeNotificationEnabled: boolean | null = null;
 let feeNotificationBorder: FeeNotificationBorder | null = null;
+let feeNotificationBorderChangeState: boolean = false;
 let feeNotificationVolume: number = 100;
 let feeNotificationSound: string | null = null;
 
@@ -39,15 +36,17 @@ chrome.runtime.onInstalled.addListener((details) => {
 
             const currentVersionReleaseNotes = releaseNotes[currentVersion];
 
+            const uiLang = chrome.i18n.getUILanguage();
+
             if (currentVersionReleaseNotes) {
                 chrome.notifications.create(
-                    `relese-notes-${currentVersion}`,
+                    `release-notes-${currentVersion}`,
                     {
                         type: "basic",
                         iconUrl: logo,
                         title: currentVersionReleaseNotes.title,
-                        message: currentVersionReleaseNotes.message,
-                        buttons: [{ title: "Release Notes" }]
+                        message: uiLang === "ru" ? currentVersionReleaseNotes.message.ru : currentVersionReleaseNotes.message.en,
+                        buttons: [{ title: translate("releaseNotesNotificationTitle") }]
                     },
                     () => {}
                 );
@@ -100,6 +99,7 @@ function initialSettings(): void {
             "blockNotificationVolume",
             "blockNotificationSound",
             "feeNotificationBorder",
+            "feeNotificationBorderChangeState",
             "feeNotificationVolume",
             "feeNotificationSound"
         ])
@@ -107,6 +107,7 @@ function initialSettings(): void {
             blockNotificationVolume = result.blockNotificationVolume ?? 100;
             blockNotificationSound = result.blockNotificationSound;
             feeNotificationBorder = result.feeNotificationBorder;
+            feeNotificationBorderChangeState = result.feeNotificationBorderChangeState ?? false;
             feeNotificationVolume = result.feeNotificationVolume ?? 100;
             feeNotificationSound = result.feeNotificationSound;
         });
@@ -160,8 +161,8 @@ function onBlockMessageHandler(eventData: any): void {
                 console.debug("Send block notification to offscreen");
                 sendMessage<PlayNotificationSoundOffscreenMessage>({
                     data: { volume: blockNotificationVolume, sound: blockNotificationSound },
-                    target: "offscreen",
-                    type: "playBlockNotificationSound"
+                    target: [MessageTarget.OFFSCREEN],
+                    type: OffscreenMessageType.PLAY_BLOCK_NOTIFICATION_SOUND
                 });
             });
         }
@@ -172,9 +173,9 @@ function onBlockMessageHandler(eventData: any): void {
         console.debug("Update blocks info with new block");
 
         sendMessage<BlockPopupMessage>({
-            target: "popup",
+            target: [MessageTarget.POPUP],
             data: { blockInfo: { lastBlockTime, lastBlockHeight } },
-            type: "blockInfo"
+            type: PopupMessageType.BLOCK_INFO
         });
 
         console.info("Block timestamp:", new Date(lastBlockTime).toLocaleString());
@@ -194,18 +195,30 @@ function checkFeeBorder(oldFees: Fees | null, newFees: Fees | null): void {
             oldFees[feeNotificationBorder.feeLevel] < newFees[feeNotificationBorder.feeLevel] &&
             newFees[feeNotificationBorder.feeLevel] >= feeNotificationBorder.feeBorder &&
             oldFees[feeNotificationBorder.feeLevel] < feeNotificationBorder.feeBorder;
+        const fromBorderToHighCondition =
+            oldFees[feeNotificationBorder.feeLevel] < newFees[feeNotificationBorder.feeLevel] &&
+            newFees[feeNotificationBorder.feeLevel] >= feeNotificationBorder.feeBorder &&
+            oldFees[feeNotificationBorder.feeLevel] === feeNotificationBorder.feeBorder;
         const fromHighToLowCondition =
             oldFees[feeNotificationBorder.feeLevel] > newFees[feeNotificationBorder.feeLevel] &&
             newFees[feeNotificationBorder.feeLevel] <= feeNotificationBorder.feeBorder &&
             oldFees[feeNotificationBorder.feeLevel] > feeNotificationBorder.feeBorder;
+        const fromBorderToLowCondition =
+            oldFees[feeNotificationBorder.feeLevel] > newFees[feeNotificationBorder.feeLevel] &&
+            newFees[feeNotificationBorder.feeLevel] <= feeNotificationBorder.feeBorder &&
+            oldFees[feeNotificationBorder.feeLevel] === feeNotificationBorder.feeBorder;
 
-        if (fromLowToHighCondition || fromHighToLowCondition) {
+        const condition = feeNotificationBorderChangeState
+            ? fromLowToHighCondition || fromHighToLowCondition || fromBorderToHighCondition || fromBorderToLowCondition
+            : fromLowToHighCondition || fromHighToLowCondition;
+
+        if (condition) {
             setupOffscreenDocument().then(() => {
                 console.debug("Send fee notification to offscreen");
                 sendMessage<PlayNotificationSoundOffscreenMessage>({
                     data: { volume: feeNotificationVolume, sound: feeNotificationSound },
-                    target: "offscreen",
-                    type: "playFeeNotificationSound"
+                    target: [MessageTarget.OFFSCREEN],
+                    type: OffscreenMessageType.PLAY_FEE_NOTIFICATION_SOUND
                 });
             });
         }
@@ -213,12 +226,12 @@ function checkFeeBorder(oldFees: Fees | null, newFees: Fees | null): void {
 }
 
 function onFeesMessageHandler(eventData: any): void {
-    if ("fees" in eventData) {
+    if (PopupMessageType.FEES in eventData) {
         console.debug("Fee updated");
         const lastFees = structuredClone(fees);
 
         fees = eventData.fees;
-        sendMessage<FeesPopupMessage>({ target: "popup", data: { fees }, type: "fees" });
+        sendMessage<FeesPopupMessage>({ target: [MessageTarget.POPUP], data: { fees }, type: PopupMessageType.FEES });
         checkFeeBorder(lastFees, fees);
 
         console.info(`Current fees: slow: ${fees?.hourFee}, medium: ${fees?.halfHourFee}, fast: ${fees?.fastestFee}`);
@@ -233,9 +246,9 @@ function onBlocksMessageHandler(eventData: any): void {
         lastBlockHeight = lastBlock.height;
         lastBlockTime = lastBlock.timestamp * 1000;
         sendMessage<BlockPopupMessage>({
-            target: "popup",
+            target: [MessageTarget.POPUP],
             data: { blockInfo: { lastBlockTime, lastBlockHeight } },
-            type: "blockInfo"
+            type: PopupMessageType.BLOCK_INFO
         });
     }
 }
@@ -305,11 +318,11 @@ function disableWebSocket(): void {
         lastBlockHeight = null;
 
         sendMessage<BlockPopupMessage>({
-            target: "popup",
+            target: [MessageTarget.POPUP],
             data: { blockInfo: { lastBlockTime, lastBlockHeight } },
-            type: "blockInfo"
+            type: PopupMessageType.BLOCK_INFO
         });
-        sendMessage<FeesPopupMessage>({ target: "popup", data: { fees }, type: "fees" });
+        sendMessage<FeesPopupMessage>({ target: [MessageTarget.POPUP], data: { fees }, type: PopupMessageType.FEES });
     }
 }
 
@@ -322,7 +335,10 @@ chrome.storage.local.get(["isBlockNotificationEnabled", "isMainnet", "isFeeNotif
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeBlockNotificationEnabled") {
+    if (
+        message.target.includes(MessageTarget.BACKGROUND) &&
+        message.type === BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_ENABLED
+    ) {
         isBlockNotificationEnabled = message.data.enabled;
         if (isBlockNotificationEnabled) {
             enableWebSocket(!!isMainnet);
@@ -333,7 +349,7 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeFeeNotificationEnabled") {
+    if (message.target.includes(MessageTarget.BACKGROUND) && message.type === BackgroundMessageType.CHANGE_FEE_NOTIFICATION_ENABLED) {
         isFeeNotificationEnabled = message.data.enabled;
         if (isFeeNotificationEnabled) {
             enableWebSocket(!!isMainnet);
@@ -344,7 +360,7 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeBlockchain") {
+    if (message.target.includes(MessageTarget.BACKGROUND) && message.type === BackgroundMessageType.CHANGE_BLOCKCHAIN) {
         isMainnet = message.data.isMainnet;
 
         if ((isBlockNotificationEnabled || isFeeNotificationEnabled) && socket) {
@@ -355,27 +371,30 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage, _, sendResponse) => {
-    if (message.target === "background" && message.type === "requestFees") {
+    if (message.target.includes(MessageTarget.BACKGROUND) && message.type === BackgroundMessageType.REQUEST_FEES) {
         console.debug("Send initial fees info");
 
-        sendResponse({ target: "popup", data: { fees }, type: "initialFees" });
+        sendResponse({ target: [MessageTarget.POPUP], data: { fees }, type: PopupMessageType.INITIAL_FEES } as FeesPopupMessage);
     }
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage, _, sendResponse) => {
-    if (message.target === "background" && message.type === "requestLastBlockInfo") {
+    if (message.target.includes(MessageTarget.BACKGROUND) && message.type === BackgroundMessageType.REQUEST_LAST_BLOCK_INFO) {
         console.debug("Send initial last block info");
 
         sendResponse({
-            target: "popup",
+            target: [MessageTarget.POPUP],
             data: { blockInfo: { lastBlockTime, lastBlockHeight } },
-            type: "initialBlockInfo"
-        });
+            type: PopupMessageType.INITIAL_BLOCK_INFO
+        } as BlockPopupMessage);
     }
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeBlockNotificationSoundVolume") {
+    if (
+        message.target.includes(MessageTarget.BACKGROUND) &&
+        message.type === BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_SOUND_VOLUME
+    ) {
         console.debug("Change block notification sound volume");
 
         blockNotificationVolume = message.data.volume;
@@ -383,7 +402,7 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeBlockNotificationSound") {
+    if (message.target.includes(MessageTarget.BACKGROUND) && message.type === BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_SOUND) {
         console.debug("Change block notification sound");
 
         blockNotificationSound = message.data.sound;
@@ -391,7 +410,10 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeFeeNotificationSoundVolume") {
+    if (
+        message.target.includes(MessageTarget.BACKGROUND) &&
+        message.type === BackgroundMessageType.CHANGE_FEE_NOTIFICATION_SOUND_VOLUME
+    ) {
         console.debug("Change fee notification sound volume");
 
         feeNotificationVolume = message.data.volume;
@@ -399,7 +421,7 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeFeeNotificationSound") {
+    if (message.target.includes(MessageTarget.BACKGROUND) && message.type === BackgroundMessageType.CHANGE_FEE_NOTIFICATION_SOUND) {
         console.debug("Change fee notification sound");
 
         feeNotificationSound = message.data.sound;
@@ -407,9 +429,20 @@ chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
 });
 
 chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
-    if (message.target === "background" && message.type === "changeFeeNotificationBorder") {
+    if (message.target.includes(MessageTarget.BACKGROUND) && message.type === BackgroundMessageType.CHANGE_FEE_NOTIFICATION_BORDER) {
         console.debug("Change fee notification border");
 
         feeNotificationBorder = message.data.feeBorder;
+    }
+});
+
+chrome.runtime.onMessage.addListener((message: BackgroundMessage) => {
+    if (
+        message.target.includes(MessageTarget.BACKGROUND) &&
+        message.type === BackgroundMessageType.CHANGE_FEE_NOTIFICATION_BORDER_CHANGE_STATE
+    ) {
+        console.debug("Change fee notification border change state");
+
+        feeNotificationBorderChangeState = message.data.feeNotificationBorderChangeState;
     }
 });

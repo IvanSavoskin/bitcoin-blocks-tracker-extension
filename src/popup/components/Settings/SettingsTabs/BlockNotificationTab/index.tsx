@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { translate } from "@coreUtils/localeUtils";
+import { BackgroundMessageType } from "@models/messages/enums";
 import SoundSelector from "@settings/SettingsTabs/SoundSelector";
 import VolumeControl from "@settings/SettingsTabs/VolumeControl";
 import blockNotification from "@static/sounds/blockNotification.m4a";
@@ -11,17 +13,18 @@ export default function BlockNotificationTab() {
 
     return (
         <div className={styles.container}>
+            <span>{translate("blockNotificationSettingsDescription")}</span>
             <VolumeControl
-                eventType="changeBlockNotificationSoundVolume"
+                eventType={BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_SOUND_VOLUME}
                 storageKey="blockNotificationVolume"
-                label="Block notification volume control"
+                label={translate("blockNotificationVolumeControlLabel")}
                 volume={volume}
                 setVolume={setVolume}
             />
             <SoundSelector
-                eventType="changeBlockNotificationSound"
+                eventType={BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_SOUND}
                 storageKey="blockNotificationSound"
-                label="Block notification sound"
+                label={translate("blockNotificationSoundSelectorLabel")}
                 defaultSound={blockNotification}
                 volume={volume}
             />

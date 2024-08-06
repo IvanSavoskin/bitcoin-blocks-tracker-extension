@@ -1,7 +1,9 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
 
-import { sendMessage } from "@coreUtils/utils";
-import { ChangeNotificationSoundBackgroundMessage } from "@models/types";
+import { translate } from "@coreUtils/localeUtils";
+import { sendMessage } from "@coreUtils/messagesUtils";
+import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
+import { ChangeNotificationSoundBackgroundMessage } from "@models/messages/types";
 import Icon from "@parts/Icon";
 import clearIcon from "@static/icons/clear.svg";
 import playIcon from "@static/icons/play.svg";
@@ -12,7 +14,7 @@ import styles from "./styles/SoundSelector.module.scss";
 
 interface SoundSelectorProps {
     label: string;
-    eventType: "changeBlockNotificationSound" | "changeFeeNotificationSound";
+    eventType: BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_SOUND | BackgroundMessageType.CHANGE_FEE_NOTIFICATION_SOUND;
     storageKey: "blockNotificationSound" | "feeNotificationSound";
     defaultSound: string;
     volume: number;
@@ -46,7 +48,7 @@ export default function SoundSelector({ label, eventType, storageKey, defaultSou
                 return true;
             } catch (error) {
                 console.warn((error as Error).message);
-                setErrorMessage("Could not use this sound: incorrect format");
+                setErrorMessage(translate("soundSelectorIncorrectFormatError"));
                 return false;
             }
         }
@@ -61,7 +63,7 @@ export default function SoundSelector({ label, eventType, storageKey, defaultSou
                 if (result) {
                     chrome.storage.local.set({ [storageKey]: _sound });
                     sendMessage<ChangeNotificationSoundBackgroundMessage>({
-                        target: "background",
+                        target: [MessageTarget.BACKGROUND],
                         data: { sound: _sound },
                         type: eventType
                     });
@@ -88,7 +90,7 @@ export default function SoundSelector({ label, eventType, storageKey, defaultSou
                 <input
                     id={`${storageKey}-input`}
                     value={sound === undefined ? "" : sound}
-                    placeholder="Sound link"
+                    placeholder={translate("soundSelectorInputPlaceholder")}
                     onInput={onSoundChange}
                 />
                 <div className={styles.iconsContainer}>

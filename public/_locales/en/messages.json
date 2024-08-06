@@ -1,0 +1,107 @@
+{
+  "trackingState": {
+    "message": "Tracking state"
+  },
+  "blocks": {
+    "message": "Blocks"
+  },
+  "fee": {
+    "message": "Fee"
+  },
+  "on": {
+    "message": "ON"
+  },
+  "off": {
+    "message": "OFF"
+  },
+  "blockchain": {
+    "message": "Blockchain"
+  },
+  "mainnet": {
+    "message": "Mainnet"
+  },
+  "testnet": {
+    "message": "Testnet"
+  },
+  "loading":{
+    "message": "Loading..."
+  },
+  "trackingIsDisabled": {
+    "message": "Tracking is disabled"
+  },
+  "feesInfo": {
+    "message": "Fees info"
+  },
+  "slow": {
+    "message": "Slow"
+  },
+  "medium": {
+    "message": "Medium"
+  },
+  "fast": {
+    "message": "Fast"
+  },
+  "satPerVb": {
+    "message": "sat/Vb"
+  },
+  "lastBlockInfo": {
+    "message": "Last block info"
+  },
+  "lastBlockHeight": {
+    "message": "Last block height:"
+  },
+  "lastBlockMined": {
+    "message": "Last block mined:"
+  },
+  "lessMinuteAgo": {
+    "message": "< minute ago"
+  },
+  "oneMinuteAgo": {
+    "message": "minutes ago"
+  },
+  "fewMinutesAgo": {
+    "message": "minutes ago"
+  },
+  "manyMinutesAgo": {
+    "message": "minutes ago"
+  },
+  "soundSelectorIncorrectFormatError": {
+    "message": "Could not use this sound: incorrect format"
+  },
+  "soundSelectorInputPlaceholder": {
+    "message": "Sound link"
+  },
+  "notificationSettings": {
+    "message": "Notification settings"
+  },
+  "blockNotificationSettingsDescription": {
+    "message": "Settings for notifications when a new block appears."
+  },
+  "blockNotificationVolumeControlLabel": {
+    "message": "Block notification volume control"
+  },
+  "blockNotificationSoundSelectorLabel": {
+    "message": "Block notification sound"
+  },
+  "feesNotificationSettingsDescription": {
+    "message": "Settings for notifications when fee reaches a specified value."
+  },
+  "feesNotificationVolumeControlLabel": {
+    "message": "Fee notification volume control"
+  },
+  "feesNotificationSoundSelectorLabel": {
+    "message": "Fee notification sound"
+  },
+  "feeNotificationBorderCheckboxLabel": {
+    "message": "Crossing border notification"
+  },
+  "feeNotificationBorderInputLabel": {
+    "message": "Fee border"
+  },
+  "feeNotificationBorderInputPlaceholder": {
+    "message": "Fee border"
+  },
+  "releaseNotesNotificationTitle": {
+    "message": "Release Notes"
+  }
+}

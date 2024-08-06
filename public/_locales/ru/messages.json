@@ -1,0 +1,107 @@
+{
+  "trackingState": {
+    "message": "Отслеживание состояния"
+  },
+  "blocks": {
+    "message": "Блоки"
+  },
+  "fee": {
+    "message": "Комиссии"
+  },
+  "on": {
+    "message": "ВКЛ"
+  },
+  "off": {
+    "message": "ВЫКЛ"
+  },
+  "blockchain": {
+    "message": "Блокчейн"
+  },
+  "mainnet": {
+    "message": "Мейннет"
+  },
+  "testnet": {
+    "message": "Тестнет"
+  },
+  "loading":{
+    "message": "Загрузка..."
+  },
+  "trackingIsDisabled": {
+    "message": "Отслеживание отключено"
+  },
+  "feesInfo": {
+    "message": "Информация о комиссиях"
+  },
+  "slow": {
+    "message": "Медленная"
+  },
+  "medium": {
+    "message": "Средняя"
+  },
+  "fast": {
+    "message": "Быстрая"
+  },
+  "satPerVb": {
+    "message": "sat/Vb"
+  },
+  "lastBlockInfo": {
+    "message": "Информация о последнем блоке"
+  },
+  "lastBlockHeight": {
+    "message": "Номер последнего блока:"
+  },
+  "lastBlockMined": {
+    "message": "Время последнего блока:"
+  },
+  "lessMinuteAgo": {
+    "message": "< меньше минуты назад"
+  },
+  "oneMinuteAgo": {
+    "message": "минуту назад"
+  },
+  "fewMinutesAgo": {
+    "message": "минуты назад"
+  },
+  "manyMinutesAgo": {
+    "message": "минут назад"
+  },
+  "soundSelectorIncorrectFormatError": {
+    "message": "Не удалось использовать этот звук: неправильный формат"
+  },
+  "soundSelectorInputPlaceholder": {
+    "message": "Ссылка на звук"
+  },
+  "notificationSettings": {
+    "message": "Настройки уведомлений"
+  },
+  "blockNotificationSettingsDescription": {
+    "message": "Настройки уведомлений при появлении нового блока."
+  },
+  "blockNotificationVolumeControlLabel": {
+    "message": "Управление громкостью уведомлений для блока"
+  },
+  "blockNotificationSoundSelectorLabel": {
+    "message": "Звук уведомления о блоке"
+  },
+  "feesNotificationSettingsDescription": {
+    "message": "Настройки уведомлений при достижении комиссией указанного значения."
+  },
+  "feesNotificationVolumeControlLabel": {
+    "message": "Регулятор громкости уведомления о комиссии"
+  },
+  "feesNotificationSoundSelectorLabel": {
+    "message": "Звук уведомления о комиссии"
+  },
+  "feeNotificationBorderCheckboxLabel": {
+    "message": "Уведомление о пересечении границы"
+  },
+  "feeNotificationBorderInputLabel": {
+    "message": "Граница комиссии"
+  },
+  "feeNotificationBorderInputPlaceholder": {
+    "message": "Граница комиссии"
+  },
+  "releaseNotesNotificationTitle": {
+    "message": "Нововведения"
+  }
+}

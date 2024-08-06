@@ -1,0 +1,78 @@
+env:
+  DIRECTORY: dist
+
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version. Example: 1.0.0'
+        required: true
+        type: string
+jobs:
+  Version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 20
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: npm
+      - name: install
+        run: npm ci || npm install
+      - name: Create tag
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/v${{ inputs.version }}>',
+              sha: context.sha
+            })
+      - if: ${{ inputs.version }}
+        name: Create release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: >
+            await github.request(`POST /repos/${{ github.repository
+            }}/releases`, {
+              tag_name: "v${{ inputs.version }}",
+              generate_release_notes: true
+            });
+  Submit:
+    if: github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        command:
+          - chrome
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: npm
+      - name: install
+        run: npm ci || npm install
+      - run: npm run prod --if-present
+      - name: Update extension’s meta
+        run: >-
+          npx dot-json@1 $DIRECTORY/manifest.json version ${{ inputs.version }}
+      - name: Submit
+        run: |
+          case ${{ matrix.command }} in
+            chrome)
+              cd $DIRECTORY && npx chrome-webstore-upload-cli@2 upload --auto-publish
+              ;;
+          esac
+        env:
+          EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}

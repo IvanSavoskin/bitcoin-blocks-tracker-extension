@@ -1,16 +1,36 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useIsTrackingEnabled } from "@context/MainContext";
-import { sendMessage } from "@coreUtils/utils";
-import { BlockInfo, BlockPopupMessage, PopupMessage, RequestLastBlockInfoBackgroundMessage } from "@models/types";
+import { translate } from "@coreUtils/localeUtils";
+import { sendMessage } from "@coreUtils/messagesUtils";
+import { BlockInfo } from "@models/block/types";
+import { BackgroundMessageType, MessageTarget, PopupMessageType } from "@models/messages/enums";
+import { BlockPopupMessage, PopupMessage, RequestLastBlockInfoBackgroundMessage } from "@models/messages/types";
 
 import styles from "./styles/LastBlockInfo.module.scss";
 import mainStyles from "./styles/Main.module.scss";
 
+const uiLang = chrome.i18n.getUILanguage();
+
+const ruRules = new Intl.PluralRules("ru-RU");
+const enRules = new Intl.PluralRules("en-US");
+
+const minutesSuffixes = new Map([
+    ["one", translate("oneMinuteAgo")],
+    ["few", translate("fewMinutesAgo")],
+    ["many", translate("manyMinutesAgo")]
+]);
+
+export const formatMinutesCount = (minutes: number) => {
+    const rule = uiLang === "ru" ? ruRules.select(minutes) : enRules.select(minutes);
+
+    return `${minutes} ${minutesSuffixes.get(rule)}`;
+};
+
 export default function LastBlockInfo() {
     const isTrackingEnabled = useIsTrackingEnabled();
 
-    const noDataText = isTrackingEnabled ? "Loading..." : "Tracking is disabled";
+    const noDataText = isTrackingEnabled ? translate("loading") : translate("trackingIsDisabled");
 
     const [lastBlockInfo, setLastBlockInfo] = useState<BlockInfo | null>();
     const [currentDate, setCurrentDate] = useState<number>(Date.now());
@@ -18,7 +38,7 @@ export default function LastBlockInfo() {
     const blockMinedAgoSeconds = (lastBlockTime: number) => Math.round(Math.abs(currentDate - lastBlockTime) / 1000);
 
     const updateLastBlockInfo = useCallback((message: PopupMessage) => {
-        if (message.target === "popup" && message.type === "blockInfo") {
+        if (message.target.includes(MessageTarget.POPUP) && message.type === PopupMessageType.BLOCK_INFO) {
             setLastBlockInfo(message.data.blockInfo);
         }
     }, []);
@@ -31,11 +51,13 @@ export default function LastBlockInfo() {
 
     useEffect(() => {
         if (!lastBlockInfo) {
-            sendMessage<RequestLastBlockInfoBackgroundMessage>({
-                target: "background",
-                type: "requestLastBlockInfo"
-            }).then((message: BlockPopupMessage) => {
-                setLastBlockInfo(message.data.blockInfo);
+            sendMessage<RequestLastBlockInfoBackgroundMessage, BlockPopupMessage>({
+                target: [MessageTarget.BACKGROUND],
+                type: BackgroundMessageType.REQUEST_LAST_BLOCK_INFO
+            }).then((message: BlockPopupMessage | void) => {
+                if (message) {
+                    setLastBlockInfo(message.data.blockInfo);
+                }
             });
         }
 
@@ -49,18 +71,18 @@ export default function LastBlockInfo() {
 
     return (
         <div>
-            <h2 className={mainStyles.header}>Last block info</h2>
+            <h2 className={mainStyles.header}>{translate("lastBlockInfo")}</h2>
             {lastBlockInfo?.lastBlockTime && lastBlockInfo?.lastBlockHeight ? (
                 <div className={styles.container}>
                     <div className={styles.item}>
-                        <span className={styles.itemHeader}>Last block height:</span>
+                        <span className={styles.itemHeader}>{translate("lastBlockHeight")}</span>
                         <span>{lastBlockInfo.lastBlockHeight}</span>
                     </div>
                     <div className={styles.item}>
-                        <span className={styles.itemHeader}>Last block mined:</span>
+                        <span className={styles.itemHeader}>{translate("lastBlockMined")}</span>
                         <span>
                             {blockMinedAgoSeconds(lastBlockInfo.lastBlockTime) > 60
-                                ? `${Math.round(blockMinedAgoSeconds(lastBlockInfo.lastBlockTime) / 60)} minutes ago`
+                                ? formatMinutesCount(Math.round(blockMinedAgoSeconds(lastBlockInfo.lastBlockTime) / 60))
                                 : "< minute ago"}{" "}
                         </span>
                     </div>
