@@ -45,6 +45,7 @@ jobs:
               generate_release_notes: true
             });
   Submit:
+    needs: Version
     if: github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
@@ -62,8 +63,9 @@ jobs:
         run: npm ci || npm install
       - run: npm run prod --if-present
       - name: Update extension’s meta
-        run: >-
+        run: |
           npx dot-json@1 $DIRECTORY/manifest.json version ${{ inputs.version }}
+          npx dot-json@1 $DIRECTORY/manifest.json version_name ${{ inputs.version }}
       - name: Submit
         run: |
           case ${{ matrix.command }} in
