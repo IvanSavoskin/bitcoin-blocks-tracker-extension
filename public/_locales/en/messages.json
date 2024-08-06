@@ -101,7 +101,7 @@
   "feeNotificationBorderInputPlaceholder": {
     "message": "Fee border"
   },
-  "releaseNotesNotificationTitle": {
+  "releaseNotesNotificationButton": {
     "message": "Release Notes"
   }
 }
