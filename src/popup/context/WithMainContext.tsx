@@ -1,8 +1,12 @@
 import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
 
-import { sendMessage } from "@coreUtils/utils";
+import { sendMessage } from "@coreUtils/messagesUtils";
 import { useToggle } from "@hooks/useToogle";
-import { ChangeBlockNotificationEnabledBackgroundMessage, ChangeFeeNotificationEnabledBackgroundMessage } from "@models/types";
+import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
+import {
+    ChangeBlockNotificationEnabledBackgroundMessage,
+    ChangeFeeNotificationEnabledBackgroundMessage
+} from "@models/messages/types";
 
 import { MainContext } from "./MainContext";
 
@@ -17,9 +21,9 @@ export default function WithMainContext({ children }: PropsWithChildren) {
         setIsBlockNotificationEnabled(blockNotificationState);
         chrome.storage.local.set({ isBlockNotificationEnabled: blockNotificationState });
         sendMessage<ChangeBlockNotificationEnabledBackgroundMessage>({
-            target: "background",
+            target: [MessageTarget.BACKGROUND],
             data: { enabled: blockNotificationState },
-            type: "changeBlockNotificationEnabled"
+            type: BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_ENABLED
         });
     }, []);
 
@@ -27,9 +31,9 @@ export default function WithMainContext({ children }: PropsWithChildren) {
         setIsFeeNotificationEnabled(feeNotificationState);
         chrome.storage.local.set({ isFeeNotificationEnabled: feeNotificationState });
         sendMessage<ChangeFeeNotificationEnabledBackgroundMessage>({
-            target: "background",
+            target: [MessageTarget.BACKGROUND],
             data: { enabled: feeNotificationState },
-            type: "changeFeeNotificationEnabled"
+            type: BackgroundMessageType.CHANGE_FEE_NOTIFICATION_ENABLED
         });
     }, []);
 

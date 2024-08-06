@@ -1,8 +1,8 @@
-import { Message } from "@models/types";
+import { Message } from "@models/messages/types";
 
-export async function sendMessage<T extends Message>(message: T): Promise<any> {
+export async function sendMessage<T extends Message, K = undefined>(message: T): Promise<K | void> {
     try {
-        return await chrome.runtime.sendMessage(message);
+        return await chrome.runtime.sendMessage<T, K>(message);
     } catch (error) {
         if (error instanceof Error) {
             if (error.message === "Could not establish connection. Receiving end does not exist.") {

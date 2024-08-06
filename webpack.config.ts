@@ -16,6 +16,7 @@ export const PATHS = {
     publicFiles: path.join(__dirname, "./public/files"),
     publicIcons: path.join(__dirname, "./public/icons"),
     publicImages: path.join(__dirname, "./public/images"),
+    publicLocales: path.join(__dirname, "./public/_locales"),
     dist: path.join(__dirname, "./dist"),
     distJs: path.join(__dirname, "./dist/js"),
     distIcons: path.join(__dirname, "./dist/icons"),
@@ -142,6 +143,10 @@ const webpack_ = (_: any, argv: any) => {
                     {
                         from: `${PATHS.publicIcons}/`,
                         to: "../icons/"
+                    },
+                    {
+                        from: `${PATHS.publicLocales}/`,
+                        to: "../_locales/"
                     }
                 ]
             }),
