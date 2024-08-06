@@ -1,3 +1,4 @@
+import { translate } from "@coreUtils/localeUtils";
 import FeeNotificationRadioButtonGroup from "@main/FeeNotificationRadioButtonGroup";
 
 import BlockNotificationRadioButtonGroup from "./BlockNotificationRadioButtonGroup";
@@ -10,7 +11,7 @@ export default function Main() {
     return (
         <>
             <div>
-                <h2 className={styles.header}>Tracking state</h2>
+                <h2 className={styles.header}>{translate("trackingState")}</h2>
                 <div className={styles.trackingStateControllersContainer}>
                     <BlockNotificationRadioButtonGroup />
                     <FeeNotificationRadioButtonGroup />

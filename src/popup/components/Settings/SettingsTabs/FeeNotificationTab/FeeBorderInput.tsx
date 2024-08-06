@@ -1,8 +1,11 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
 
 import { useIsAutoFeeNotificationEnabled, useIsFeeNotificationEnabled } from "@context/MainContext";
-import { sendMessage } from "@coreUtils/utils";
-import { ChangeNotificationBorderBackgroundMessage, FeeLevel } from "@models/types";
+import { translate } from "@coreUtils/localeUtils";
+import { sendMessage } from "@coreUtils/messagesUtils";
+import { FeeLevel } from "@models/fee/types";
+import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
+import { ChangeNotificationBorderBackgroundMessage } from "@models/messages/types";
 import Icon from "@parts/Icon";
 import clearIcon from "@static/icons/clear.svg";
 import saveIcon from "@static/icons/save.svg";
@@ -43,9 +46,9 @@ export default function FeeBorderInput() {
             const _feeBorder = feeBorder === undefined ? null : feeBorder;
             chrome.storage.local.set({ feeNotificationBorder: { feeBorder: _feeBorder, feeLevel } });
             sendMessage<ChangeNotificationBorderBackgroundMessage>({
-                target: "background",
+                target: [MessageTarget.BACKGROUND],
                 data: { feeBorder: { feeBorder: _feeBorder, feeLevel } },
-                type: "changeFeeNotificationBorder"
+                type: BackgroundMessageType.CHANGE_FEE_NOTIFICATION_BORDER
             });
             setInitialFeeBorder(feeBorder);
             setInitialFeeLevel(feeLevel);
@@ -85,22 +88,22 @@ export default function FeeBorderInput() {
     return (
         <div className={mainStyles.itemContainer}>
             <label className={mainStyles.label} htmlFor="fee-border-input">
-                Fee border
+                {translate("feeNotificationBorderInputLabel")}
             </label>
             <div className={styles.inputContainer}>
                 <input
                     id="fee-border-input"
                     value={feeBorder === undefined ? "" : feeBorder}
-                    placeholder="Fee border"
+                    placeholder={translate("feeNotificationBorderInputPlaceholder")}
                     onInput={onFeeBorderChange}
                     type="number"
                     min={0}
                     step={1}
                 />
                 <select name="feeLevel" onChange={onFeeLevelChange} value={feeLevel}>
-                    <option value={FeeLevel.SLOW}>Slow</option>
-                    <option value={FeeLevel.MEDIUM}>Medium</option>
-                    <option value={FeeLevel.FAST}>Fast</option>
+                    <option value={FeeLevel.SLOW}>{translate("slow")}</option>
+                    <option value={FeeLevel.MEDIUM}>{translate("medium")}</option>
+                    <option value={FeeLevel.FAST}>{translate("fast")}</option>
                 </select>
                 <div className={styles.iconsContainer}>
                     <Icon src={clearIcon} link onClick={onFeeBorderClear} disabled={feeBorder === undefined} />

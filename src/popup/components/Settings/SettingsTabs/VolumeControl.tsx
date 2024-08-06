@@ -1,14 +1,17 @@
 import React, { FormEvent, useCallback, useEffect } from "react";
 
-import { sendMessage } from "@coreUtils/utils";
-import { ChangeNotificationSoundVolumeBackgroundMessage } from "@models/types";
+import { sendMessage } from "@coreUtils/messagesUtils";
+import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
+import { ChangeNotificationSoundVolumeBackgroundMessage } from "@models/messages/types";
 
 import mainStyles from "./styles/SettingsTabs.module.scss";
 import styles from "./styles/VolumeControl.module.scss";
 
 interface VolumeControlProps {
     label: string;
-    eventType: "changeBlockNotificationSoundVolume" | "changeFeeNotificationSoundVolume";
+    eventType:
+        | BackgroundMessageType.CHANGE_BLOCK_NOTIFICATION_SOUND_VOLUME
+        | BackgroundMessageType.CHANGE_FEE_NOTIFICATION_SOUND_VOLUME;
     storageKey: "blockNotificationVolume" | "feeNotificationVolume";
     volume: number;
     setVolume: React.Dispatch<React.SetStateAction<number>>;
@@ -31,7 +34,7 @@ export default function VolumeControl({ label, eventType, storageKey, volume, se
             setVolume(newVolume);
             chrome.storage.local.set({ [storageKey]: newVolume });
             sendMessage<ChangeNotificationSoundVolumeBackgroundMessage>({
-                target: "background",
+                target: [MessageTarget.BACKGROUND],
                 data: { volume: newVolume },
                 type: eventType
             });

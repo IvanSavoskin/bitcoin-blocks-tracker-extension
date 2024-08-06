@@ -1,15 +1,18 @@
-import { OffscreenMessage } from "@models/types";
+import { MessageTarget, OffscreenMessageType } from "@models/messages/enums";
+import { OffscreenMessage } from "@models/messages/types";
 import blockNotification from "@static/sounds/blockNotification.m4a";
 import feeNotification from "@static/sounds/feeNotification.wav";
 
 console.debug("Initialize offscreen");
 
-function getDefaultSound(type: "playBlockNotificationSound" | "playFeeNotificationSound"): string {
+function getDefaultSound(
+    type: OffscreenMessageType.PLAY_BLOCK_NOTIFICATION_SOUND | OffscreenMessageType.PLAY_FEE_NOTIFICATION_SOUND
+): string {
     switch (type) {
-        case "playBlockNotificationSound": {
+        case OffscreenMessageType.PLAY_BLOCK_NOTIFICATION_SOUND: {
             return blockNotification;
         }
-        case "playFeeNotificationSound": {
+        case OffscreenMessageType.PLAY_FEE_NOTIFICATION_SOUND: {
             return feeNotification;
         }
         // skip default
@@ -18,8 +21,9 @@ function getDefaultSound(type: "playBlockNotificationSound" | "playFeeNotificati
 
 chrome.runtime.onMessage.addListener((message: OffscreenMessage) => {
     if (
-        message.target === "offscreen" &&
-        (message.type === "playBlockNotificationSound" || message.type === "playFeeNotificationSound")
+        message.target.includes(MessageTarget.OFFSCREEN) &&
+        (message.type === OffscreenMessageType.PLAY_BLOCK_NOTIFICATION_SOUND ||
+            message.type === OffscreenMessageType.PLAY_FEE_NOTIFICATION_SOUND)
     ) {
         const sound = new Audio(message.data.sound ?? getDefaultSound(message.type));
 

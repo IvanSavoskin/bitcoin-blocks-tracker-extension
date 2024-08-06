@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import { translate } from "@coreUtils/localeUtils";
+import { BackgroundMessageType } from "@models/messages/enums";
+import FeeBorderCheckbox from "@settings/SettingsTabs/FeeNotificationTab/FeeBorderCheckbox";
 import FeeBorderInput from "@settings/SettingsTabs/FeeNotificationTab/FeeBorderInput";
 import SoundSelector from "@settings/SettingsTabs/SoundSelector";
 import VolumeControl from "@settings/SettingsTabs/VolumeControl";
@@ -12,18 +15,20 @@ export default function FeeNotificationTab() {
 
     return (
         <div className={styles.container}>
+            <span>{translate("feesNotificationSettingsDescription")}</span>
             <FeeBorderInput />
+            <FeeBorderCheckbox />
             <VolumeControl
-                eventType="changeFeeNotificationSoundVolume"
+                eventType={BackgroundMessageType.CHANGE_FEE_NOTIFICATION_SOUND_VOLUME}
                 storageKey="feeNotificationVolume"
-                label="Fee notification volume control"
+                label={translate("feesNotificationVolumeControlLabel")}
                 volume={volume}
                 setVolume={setVolume}
             />
             <SoundSelector
-                eventType="changeFeeNotificationSound"
+                eventType={BackgroundMessageType.CHANGE_FEE_NOTIFICATION_SOUND}
                 storageKey="feeNotificationSound"
-                label="Fee notification sound"
+                label={translate("feesNotificationSoundSelectorLabel")}
                 defaultSound={feeNotification}
                 volume={volume}
             />
