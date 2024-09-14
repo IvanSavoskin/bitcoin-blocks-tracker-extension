@@ -6,6 +6,7 @@
   "description": "Extension for Bitcoin blocks tracking via Mempool space",
   "version": "0.0.0",
   "version_name": "0.0.0",
+  "default_locale": "en",
 
   "icons": {
     "16":"icons/16.png",

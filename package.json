@@ -1,6 +1,6 @@
 {
   "name": "mempool-space-block-tracker-chrome-extenstion",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Chrome extension to track new bitcoin blocks via Mempool Space",
   "author": "Savoskin Ivan",
   "license": "MIT",

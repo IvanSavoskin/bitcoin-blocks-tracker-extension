@@ -13,29 +13,29 @@ jobs:
   Version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 20
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - name: install
         run: npm ci || npm install
       - name: Create tag
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/v${{ inputs.version }}>',
+              ref: 'refs/tags/v${{ inputs.version }}',
               sha: context.sha
             })
       - if: ${{ inputs.version }}
         name: Create release
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: >
@@ -54,8 +54,8 @@ jobs:
           - chrome
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -70,7 +70,7 @@ jobs:
         run: |
           case ${{ matrix.command }} in
             chrome)
-              cd $DIRECTORY && npx chrome-webstore-upload-cli@2 upload --auto-publish
+              cd $DIRECTORY && npx chrome-webstore-upload-cli@3 upload --auto-publish
               ;;
           esac
         env:
