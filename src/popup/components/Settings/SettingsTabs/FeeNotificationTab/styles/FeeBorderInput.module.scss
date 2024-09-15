@@ -1,9 +1,13 @@
-.input-container {
-  column-gap: 10px;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  width: 100%;
+.border-input {
+  max-width: 110px;
+
+  &-container {
+    column-gap: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 .icons-container {
