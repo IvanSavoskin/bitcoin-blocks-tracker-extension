@@ -90,9 +90,10 @@ export default function FeeBorderInput() {
             <label className={mainStyles.label} htmlFor="fee-border-input">
                 {translate("feeNotificationBorderInputLabel")}
             </label>
-            <div className={styles.inputContainer}>
+            <div className={styles.borderInputContainer}>
                 <input
                     id="fee-border-input"
+                    className={styles.borderInput}
                     value={feeBorder === undefined ? "" : feeBorder}
                     placeholder={translate("feeNotificationBorderInputPlaceholder")}
                     onInput={onFeeBorderChange}
