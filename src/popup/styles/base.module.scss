@@ -1,0 +1,19 @@
+.flex-center-container,
+%flex-center-container {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.base-container,
+%base-container {
+  height: 100%;
+  width: 100%;
+}
+
+.flex-base-center-container,
+%flex-base-center-container {
+  @extend %base-container, %flex-center-container;
+}

@@ -5,7 +5,7 @@ import { BackgroundMessageType, MessageTarget, OffscreenMessageType, PopupMessag
 import { BackgroundMessage, BlockPopupMessage, FeesPopupMessage, PlayNotificationSoundOffscreenMessage } from "@models/messages/types";
 import logo from "@static/images/logo.png";
 
-import { releaseNotes } from "./utils/releaseNotes";
+import releaseNotes from "./utils/releaseNotes";
 import { getSocketUrl } from "./utils/utils";
 
 const OFFSCREEN_DOCUMENT_NAME = "offScreen.html";

@@ -9,8 +9,9 @@
         "strict": true,
         "target": "es6",
         "moduleResolution": "node",
-        "module": "ES6",
+        "module": "esnext",
         "esModuleInterop": true,
+        "isolatedModules": true,
         "sourceMap": false,
         "rootDir": "src",
         "outDir": "dist/js",
@@ -18,11 +19,14 @@
         "jsx": "react-jsx",
         "typeRoots": [ "node_modules/@types", "./custom_typing"],
         "baseUrl": "src",
+        "incremental": true,
         "paths": {
             "@settings/*": ["popup/components/Settings/*"],
             "@main/*": ["popup/components/Main/*"],
             "@context/*": ["popup/context/*"],
             "@parts/*": ["popup/parts/*"],
+            "@popupUtils/*": ["popup/utils/*"],
+            "@popupCoreStyles/*": ["popup/styles/*"],
             "@static/*": ["static/*"],
             "@coreUtils/*": ["utils/*"],
             "@hooks/*": ["utils/hooks/*"],
@@ -31,7 +35,7 @@
     },
     "include": [
         "./src/**/*",
-        "./webpack.config.ts",
+        "./rspack.config.ts",
         "./custom_typing/**/*"
     ],
     "exclude": ["public", "./node_modules"]
