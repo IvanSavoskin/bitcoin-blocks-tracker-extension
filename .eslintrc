@@ -26,7 +26,7 @@
         "react-hooks",
         "unicorn",
         "simple-import-sort",
-        "import"
+        "import-x"
     ],
     "rules": {
         "prettier/prettier": [
@@ -56,7 +56,7 @@
             }
         ],
         "import/prefer-default-export": "off",
-        "import/extensions": [
+        "import-x/extensions": [
             "error",
             "ignorePackages",
             {
@@ -64,7 +64,7 @@
                 "tsx": "never"
             }
         ],
-        "import/no-extraneous-dependencies": "off",
+        "import-x/no-extraneous-dependencies": "off",
         "unicorn/filename-case": "off",
         "no-use-before-define": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -175,12 +175,12 @@
                 ]
             }
         ],
-        "import/no-import-module-exports": "off",
+        "import-x/no-import-module-exports": "off",
         "react/jsx-uses-react": "off",
         "react/react-in-jsx-scope": "off",
         "react/jsx-max-props-per-line": "off",
         "no-nested-ternary": "error",
-        "import/order": "off",
+        "import-x/order": "off",
         "simple-import-sort/imports": [
             "error",
             {
@@ -196,9 +196,9 @@
             }
         ],
         "simple-import-sort/exports": "error",
-        "import/first": "error",
-        "import/newline-after-import": "error",
-        "import/no-duplicates": "error",
+        "import-x/first": "error",
+        "import-x/newline-after-import": "error",
+        "import-x/no-duplicates": "error",
         "no-continue": "off",
         "jsx-a11y/label-has-associated-control": [
             "error",
@@ -211,8 +211,9 @@
         "no-console": "off"
     },
     "settings": {
-        "import/resolver": {
-            "typescript": {}
+        "import-x/resolver": {
+            "typescript": true,
+            "node": true
         },
         "react": {
             "version": "detect"

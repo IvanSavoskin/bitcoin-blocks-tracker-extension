@@ -1,4 +1,4 @@
-export const releaseNotes: Record<string, { title: { en: string; ru: string }; message: { en: string; ru: string }; link: string }> = {
+const releaseNotes: Record<string, { title: { en: string; ru: string }; message: { en: string; ru: string }; link: string }> = {
     "1.1.0": {
         title: {
             en: "Update 1.1.0",
@@ -22,3 +22,5 @@ export const releaseNotes: Record<string, { title: { en: string; ru: string }; m
         link: "https://github.com/IvanSavoskin/bitcoin-blocks-tracker-extension/releases/tag/v1.2.2"
     }
 };
+
+export default releaseNotes;
