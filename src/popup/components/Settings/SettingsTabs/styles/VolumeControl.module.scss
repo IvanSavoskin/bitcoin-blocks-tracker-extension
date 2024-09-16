@@ -1,4 +1,38 @@
 .control-container {
+  align-items: center;
   column-gap: 10px;
   display: flex;
+}
+
+.icon {
+  color: var(--range-input-background-color);
+  display: inline-block;
+  height: auto;
+  vertical-align: top;
+  width: 25px;
+}
+
+.input {
+  appearance: none;
+  background: var(--range-input-background-color);
+  border-radius: 999px;
+  cursor: pointer;
+  height: 6px;
+  overflow: hidden;
+  transition: height 0.1s;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    box-shadow: -200px 0 0 200px var(--highlight-color);
+    height: 0;
+    width: 0;
+  }
+
+  &:hover {
+    height: calc(6px * 2);
+  }
+}
+
+.volume-level {
+  width: 36px;
 }

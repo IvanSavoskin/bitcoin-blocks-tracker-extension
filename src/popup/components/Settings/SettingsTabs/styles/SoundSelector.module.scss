@@ -1,4 +1,5 @@
 .input-container {
+  align-items: center;
   column-gap: 10px;
   display: flex;
   flex-wrap: nowrap;
@@ -13,6 +14,6 @@
 }
 
 .error-message {
-  color: #af000e;
+  color: var(--error-color);
   font-weight: bold;
 }

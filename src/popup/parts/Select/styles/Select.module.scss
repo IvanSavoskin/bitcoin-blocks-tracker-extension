@@ -1,0 +1,29 @@
+.select-container {
+  position: relative;
+}
+
+.select-container .select {
+  background-color: var(--input-background-color);
+  border: 0;
+  border-radius: 5px 5px 0 0;
+  box-shadow: 0 2px 5px var(--input-background-focus-color);
+  color: var(--base-text-color);
+  font-size: 14px;
+  font-weight: 500;
+  max-height: 32px;
+  padding: 8px;
+  transition-duration: 200ms;
+  transition-property: background-color;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.select-container .select:focus,
+.select-container .select:active {
+  outline: none;
+}
+
+.select-container:focus-within .select,
+.select-container .select:focus,
+.select-container .select:active {
+  background-color: var(--input-background-focus-color);
+}
