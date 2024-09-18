@@ -3,7 +3,7 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import path from "path";
 
 import rspack from "@rspack/core";
-import {SwcLoaderOptions} from "@rspack/core/dist/builtin-loader/swc/types";
+import { SwcLoaderOptions } from "@rspack/core/dist/builtin-loader/swc/types";
 
 export const PATHS = {
     src: path.join(__dirname, "./src"),
@@ -58,10 +58,10 @@ const rspack_ = (_: any, argv: any) => {
                                 },
                                 transform: {
                                     react: {
-                                        runtime: 'automatic',
+                                        runtime: "automatic"
                                     }
                                 }
-                            },
+                            }
                         } satisfies SwcLoaderOptions
                     },
                     type: "javascript/auto"
@@ -83,7 +83,7 @@ const rspack_ = (_: any, argv: any) => {
                     test: /\.scss$/,
                     exclude: [PATHS.nodeModules],
                     use: [
-                        isProduction ? rspack.CssExtractRspackPlugin.loader : "style-loader",
+                        rspack.CssExtractRspackPlugin.loader,
                         {
                             loader: "css-loader",
                             options: {
@@ -114,11 +114,16 @@ const rspack_ = (_: any, argv: any) => {
                     ]
                 },
                 {
-                    test: /\.(m4a|svg|wav|png)$/,
+                    test: /\.(m4a|wav|png)$/,
                     type: "asset/resource",
                     generator: {
                         filename: "../static/assets/[name]-[contenthash][ext]"
                     }
+                },
+                {
+                    test: /\.svg$/i,
+                    issuer: /\.tsx?$/,
+                    use: [{ loader: "@svgr/webpack" }]
                 }
             ]
         },

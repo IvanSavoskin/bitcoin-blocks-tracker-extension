@@ -1,9 +1,12 @@
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
+import classNames from "classnames";
+
 import { translate } from "@coreUtils/localeUtils";
 import { sendMessage } from "@coreUtils/messagesUtils";
 import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
 import { ChangeNotificationBorderChangeStateBackgroundMessage } from "@models/messages/types";
+import Checkbox from "@parts/Checkbox";
 
 import mainStyles from "../styles/SettingsTabs.module.scss";
 import styles from "./styles/FeeBorderCheckbox.module.scss";
@@ -33,15 +36,10 @@ export default function FeeBorderCheckbox() {
 
     return (
         <div className={styles.container}>
-            <label className={mainStyles.label} htmlFor="fee-border-change-state-chackbox">
+            <label className={classNames(mainStyles.label, styles.label)} htmlFor="fee-border-change-state-chackbox">
                 {translate("feeNotificationBorderCheckboxLabel")}
             </label>
-            <input
-                id="fee-border-change-state-chackbox"
-                checked={feeBorderChangeState}
-                onChange={onFeeBorderChangeStateChanged}
-                type="checkbox"
-            />
+            <Checkbox id="fee-border-change-state-chackbox" checked={feeBorderChangeState} onChange={onFeeBorderChangeStateChanged} />
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import { BlockInfo } from "@models/block/types";
 import { FeeNotificationBorder, Fees } from "@models/fee/types";
 import { BackgroundMessageType, MessageTarget, OffscreenMessageType, PopupMessageType } from "@models/messages/enums";
+import { ThemeEnum } from "@models/theme/enums";
 
 export interface Message {
     data?: Record<string, boolean | string | number | object | null>;
@@ -74,6 +75,14 @@ export interface ChangeFeeNotificationEnabledBackgroundMessage extends Message {
     type: BackgroundMessageType.CHANGE_FEE_NOTIFICATION_ENABLED;
 }
 
+export interface ChangeThemeBackgroundMessage extends Message {
+    data: {
+        theme: ThemeEnum;
+    };
+    target: [MessageTarget.BACKGROUND];
+    type: BackgroundMessageType.CHANGE_THEME;
+}
+
 export type BackgroundMessage =
     | ChangeBlockNotificationEnabledBackgroundMessage
     | ChangeBlockchainBackgroundMessage
@@ -83,7 +92,8 @@ export type BackgroundMessage =
     | ChangeNotificationSoundBackgroundMessage
     | ChangeNotificationBorderBackgroundMessage
     | ChangeFeeNotificationEnabledBackgroundMessage
-    | ChangeNotificationBorderChangeStateBackgroundMessage;
+    | ChangeNotificationBorderChangeStateBackgroundMessage
+    | ChangeThemeBackgroundMessage;
 
 export interface PlayNotificationSoundOffscreenMessage extends Message {
     data: {

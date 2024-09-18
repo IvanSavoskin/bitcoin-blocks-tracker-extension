@@ -1,0 +1,59 @@
+@use 'sass:color';
+
+.dark-theme {
+  --base-text-color: #f1f1f1;
+  --secondary-text-color: #acaeb8;
+  --secondary-text-hover-color: #cccfd6;
+  --base-backgroung-color: #1d1f31;
+  --base-border-color: #3d3d42;
+  --red-button-background-color: #ff4747;
+  --red-button-hover-background-color: #ff474719;
+  --green-button-background-color: #3d9a3d;
+  --green-button-hover-background-color: #3d9a3d19;
+  --highlight-color: #8a5bcc;
+  --error-color: #ea0417;
+
+  --range-input-background-color: #7c7c86;
+
+  --input-background-color: #24273e;
+  --input-background-focus-color: #2d3348;
+  --input-box-shadow-color: #2d33484c;
+  --input-placeholder-color: #ffffff7f;
+
+  --checkbox-hover-background-color: #3d3d42;
+  --checkbox-hover-box-shadow-color: #3d3d4233;
+  --checkbox-border-color: #fff;
+  --checkbox-checked-box-shadow-color: #8a5bcc80;
+
+  --theme-switcher-hover-color: #e2e6e9;
+  --theme-switcher-color: #abb3ba;
+}
+
+.light-theme {
+  --base-text-color: #000;
+  --secondary-text-color: #57606f;
+  --secondary-text-hover-color: #222;
+  --base-backgroung-color: #fff;
+  --base-border-color: #999;
+  --red-button-background-color: #ffc5c5;
+  --red-button-hover-background-color: rgba(255, 197, 197, 0.2);
+  --green-button-background-color: #bfb;
+  --green-button-hover-background-color: rgba(187, 255, 187, 0.2);
+  --highlight-color: #07c;
+  --error-color: #af000e;
+
+  --range-input-background-color: #b9b9c4;
+
+  --input-background-color: #f3f3f6;
+  --input-background-focus-color: #e2e5ea;
+  --input-box-shadow-color: rgba(151, 159, 162, 0.3);
+  --input-placeholder-color: #0000007f;
+
+  --checkbox-hover-background-color: #d0cdcd;
+  --checkbox-hover-box-shadow-color: #9993;
+  --checkbox-border-color: #57606f;
+  --checkbox-checked-box-shadow-color: #0077cc80;
+
+  --theme-switcher-hover-color: #22262a;
+  --theme-switcher-color: #454d54;
+}

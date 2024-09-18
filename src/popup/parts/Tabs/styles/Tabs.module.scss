@@ -8,8 +8,8 @@
 }
 
 .tab-list {
-  border-bottom: 2px solid #ddd;
-  color: #57606f;
+  border-bottom: 2px solid var(--base-border-color);
+  color: var(--secondary-text-color);
   display: flex;
   font-weight: bold;
   gap: 0.5em;
@@ -26,8 +26,7 @@
 
 .tab-btn {
   background-color: transparent;
-  border: 2px solid #ddd;
-  border-width: 0 0 2px;
+  border: 0;
   color: inherit;
   cursor: pointer;
   font: inherit;
@@ -35,11 +34,13 @@
   white-space: nowrap;
 
   &-active {
-    border-color: #07c;
-    color: #07c;
+    border: solid var(--highlight-color);
+    border-width: 0 0 2px;
+    color: var(--highlight-color);
+    cursor: default;
   }
 
   &:not(.tab-btn-active):hover {
-    color: #222;
+    color: var(--secondary-text-hover-color);
   }
 }
