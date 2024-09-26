@@ -1,11 +1,11 @@
 import { translate } from "@coreUtils/localeUtils";
 import { sendMessage } from "@coreUtils/messagesUtils";
+import releaseNotes from "@coreUtils/releaseNotes";
 import { FeeNotificationBorder, Fees } from "@models/fee/types";
 import { BackgroundMessageType, MessageTarget, OffscreenMessageType, PopupMessageType } from "@models/messages/enums";
 import { BackgroundMessage, BlockPopupMessage, FeesPopupMessage, PlayNotificationSoundOffscreenMessage } from "@models/messages/types";
 import logo from "@static/images/logo.png";
 
-import releaseNotes from "./utils/releaseNotes";
 import { getSocketUrl } from "./utils/utils";
 
 const OFFSCREEN_DOCUMENT_NAME = "offScreen.html";
