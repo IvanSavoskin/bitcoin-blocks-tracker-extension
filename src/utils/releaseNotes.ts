@@ -29,7 +29,22 @@ const releaseNotes: ReleaseNotes = {
             en: ["Localization into Russian", "Notification mode about the commission leaving the specified border"],
             ru: ["Локализация на русский язык", "Режим нотификации о выходе комиссии с заданной границы"]
         },
-        link: "https://github.com/IvanSavoskin/bitcoin-blocks-tracker-extension/releases/tag/v1.2.2"
+        link: "https://github.com/IvanSavoskin/bitcoin-blocks-tracker-extension/releases/tag/v1.2.0"
+    },
+    "1.3.0": {
+        title: {
+            en: "Update 1.3.0",
+            ru: "Обновление 1.3.0"
+        },
+        message: {
+            en: "Added dark theme, improved design, added tab in settings with information about extension and other changes in version 1.3.0. More details at the link https://github.com/IvanSavoskin/bitcoin-blocks-tracker-extension/releases/tag/v1.3.0",
+            ru: "Добавлена темная тема, улучшен дизайн, добавлена вкладка в настройке с информацией о расширении и другие изменения в версии 1.3.0. Подробнее на ссылке https://github.com/IvanSavoskin/bitcoin-blocks-tracker-extension/releases/tag/v1.3.0"
+        },
+        info: {
+            en: ["Dark theme", "Improved design", "Tab in settings with information about extension"],
+            ru: ["Темная тема", "Улучшен дизайн", "Вкладка в настройке с информацией о расширении"]
+        },
+        link: "https://github.com/IvanSavoskin/bitcoin-blocks-tracker-extension/releases/tag/v1.3.0"
     }
 };
 
