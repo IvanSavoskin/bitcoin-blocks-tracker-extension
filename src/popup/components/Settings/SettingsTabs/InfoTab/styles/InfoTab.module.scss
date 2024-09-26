@@ -1,0 +1,52 @@
+.version {
+  align-self: flex-end;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  width: 100%;
+}
+
+.release-notes {
+  display: flex;
+  flex-direction: column;
+
+  &-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &-empty {
+    font-size: 18px;
+  }
+
+  &-content {
+    text-align: left;
+  }
+}
+
+.buttons {
+  align-items: baseline;
+  column-gap: 7px;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  background: none !important;
+  border: 0;
+  color: var(--base-text-color);
+  cursor: pointer;
+  line-height: 17px;
+  padding: 0 !important;
+  text-decoration: none;
+
+  &:hover {
+    border-bottom: 1px solid var(--highlight-color);
+    color: var(--highlight-color);
+    text-decoration: none;
+  }
+
+  &:visited {
+    color: var(--base-text-color);
+  }
+}

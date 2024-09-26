@@ -8,6 +8,9 @@
   "fee": {
     "message": "Комиссии"
   },
+  "info": {
+    "message": "Инфо"
+  },
   "on": {
     "message": "ВКЛ"
   },
@@ -100,6 +103,21 @@
   },
   "feeNotificationBorderInputPlaceholder": {
     "message": "Граница комиссии"
+  },
+  "version": {
+    "message": "Версия"
+  },
+  "whatsNew": {
+    "message": "Что нового"
+  },
+  "otherChanges": {
+    "message": "и другие изменения"
+  },
+  "releases": {
+    "message": "Релизы"
+  },
+  "sourceCode": {
+    "message": "Исходный код"
   },
   "releaseNotesNotificationButton": {
     "message": "Список изменений"

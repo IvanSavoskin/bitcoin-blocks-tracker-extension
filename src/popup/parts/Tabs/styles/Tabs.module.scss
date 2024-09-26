@@ -1,4 +1,5 @@
-.tab-nav {
+.tab-navigation {
+  min-height: 36px;
   overflow-x: scroll;
   scrollbar-width: none;
 
@@ -24,7 +25,7 @@
   margin-bottom: -2px;
 }
 
-.tab-btn {
+.tab-button {
   background-color: transparent;
   border: 0;
   color: inherit;
@@ -40,7 +41,7 @@
     cursor: default;
   }
 
-  &:not(.tab-btn-active):hover {
+  &:not(.tab-button-active):hover {
     color: var(--secondary-text-hover-color);
   }
 }

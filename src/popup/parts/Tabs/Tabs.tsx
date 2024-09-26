@@ -9,10 +9,9 @@ import styles from "./styles/Tabs.module.scss";
 interface TabsProps {
     activeTabIndex?: number;
     onChangeActiveTab?: (index: number) => void;
-    className?: string;
 }
 
-export default function Tabs({ children, activeTabIndex, onChangeActiveTab, className }: PropsWithChildren<TabsProps>) {
+export default function Tabs({ children, activeTabIndex, onChangeActiveTab }: PropsWithChildren<TabsProps>) {
     const [activeTab, setActiveTab] = useState(activeTabIndex || 0);
 
     const handleTabClick = (index: number) => {
@@ -33,8 +32,8 @@ export default function Tabs({ children, activeTabIndex, onChangeActiveTab, clas
     );
 
     return (
-        <div className={classNames(className)}>
-            <nav className={styles.tabNav}>
+        <>
+            <nav className={styles.tabNavigation}>
                 <ul className={styles.tabList} role="tablist" aria-orientation="horizontal">
                     {tabs.map((tab, index) => (
                         <li key={`tab-${tab.props.id}`}>
@@ -46,7 +45,7 @@ export default function Tabs({ children, activeTabIndex, onChangeActiveTab, clas
                                 aria-controls={`panel-${tab.props.id}`}
                                 aria-selected={activeTab === index}
                                 onClick={() => handleTabClick(index)}
-                                className={classNames(styles.tabBtn, { [styles.tabBtnActive]: activeTab === index })}
+                                className={classNames(styles.tabButton, { [styles.tabButtonActive]: activeTab === index })}
                             >
                                 {tab.props.label}
                             </button>
@@ -55,6 +54,6 @@ export default function Tabs({ children, activeTabIndex, onChangeActiveTab, clas
                 </ul>
             </nav>
             {tabs[activeTab || 0]}
-        </div>
+        </>
     );
 }
