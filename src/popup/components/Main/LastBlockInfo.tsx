@@ -83,7 +83,7 @@ export default function LastBlockInfo() {
                         <span>
                             {blockMinedAgoSeconds(lastBlockInfo.lastBlockTime) > 60
                                 ? formatMinutesCount(Math.round(blockMinedAgoSeconds(lastBlockInfo.lastBlockTime) / 60))
-                                : "< minute ago"}{" "}
+                                : translate("lessMinuteAgo")}{" "}
                         </span>
                     </div>
                 </div>
