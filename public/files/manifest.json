@@ -1,9 +1,7 @@
 {
   "manifest_version": 3,
   "minimum_chrome_version": "116",
-
   "name": "Bitcoin blocks tracker",
-  "description": "Extension for Bitcoin blocks tracking via Mempool space",
   "version": "0.0.0",
   "version_name": "0.0.0",
   "default_locale": "en",
