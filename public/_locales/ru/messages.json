@@ -57,7 +57,7 @@
     "message": "Время последнего блока:"
   },
   "lessMinuteAgo": {
-    "message": "< меньше минуты назад"
+    "message": "< минуты назад"
   },
   "oneMinuteAgo": {
     "message": "минуту назад"

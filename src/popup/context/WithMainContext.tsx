@@ -47,7 +47,6 @@ export default function WithMainContext({ children }: PropsWithChildren) {
             if (feeNotificationState) {
                 chrome.storage.local.get(["feeNotificationBorder"]).then((result) => {
                     const { feeNotificationBorder } = result;
-                    console.log(result);
                     if (!feeNotificationBorder || (!feeNotificationBorder.feeBorder && feeNotificationBorder.feeBorder !== 0)) {
                         setIsAutoFeeNotificationEnabled(true);
                         setActiveSettingsTab(1);
