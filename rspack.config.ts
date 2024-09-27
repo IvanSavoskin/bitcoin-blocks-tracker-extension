@@ -1,10 +1,9 @@
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import CopyWebpackPlugin from "copy-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
-import webpack from "webpack";
+
+import rspack from "@rspack/core";
+import { SwcLoaderOptions } from "@rspack/core/dist/builtin-loader/swc/types";
 
 export const PATHS = {
     src: path.join(__dirname, "./src"),
@@ -23,12 +22,12 @@ export const PATHS = {
     nodeModules: path.resolve(__dirname, "./node_modules")
 };
 
-const webpack_ = (_: any, argv: any) => {
+const rspack_ = (_: any, argv: any) => {
     const isProduction = argv.mode === "production";
 
     return {
         mode: isProduction ? "production" : "development",
-        devtool: isProduction ? "cheap-source-map" : "source-map",
+        devtool: isProduction ? false : "source-map",
         context: __dirname,
         entry: {
             popup: path.join(PATHS.srcPopup, "index.tsx"),
@@ -40,17 +39,6 @@ const webpack_ = (_: any, argv: any) => {
             filename: "[name].js"
         },
         optimization: {
-            splitChunks: {
-                cacheGroups: {
-                    vendor: {
-                        name: "vendors",
-                        test: /node_modules\/(?!react)(?!react-dom)/,
-                        chunks: "all",
-                        enforce: true,
-                        maxSize: 249_856
-                    }
-                }
-            },
             runtimeChunk: false,
             moduleIds: "deterministic",
             minimize: true
@@ -58,25 +46,44 @@ const webpack_ = (_: any, argv: any) => {
         module: {
             rules: [
                 {
-                    test: /\.tsx?$/,
+                    test: /\.tsx$/,
                     exclude: [PATHS.nodeModules],
-                    use: [
-                        {
-                            loader: "ts-loader",
-                            options: {
-                                compilerOptions: {
-                                    module: "ESNext",
-                                    removeComments: false
+                    use: {
+                        loader: "builtin:swc-loader",
+                        options: {
+                            jsc: {
+                                parser: {
+                                    syntax: "typescript",
+                                    tsx: true
+                                },
+                                transform: {
+                                    react: {
+                                        runtime: "automatic"
+                                    }
                                 }
                             }
+                        } satisfies SwcLoaderOptions
+                    },
+                    type: "javascript/auto"
+                },
+                {
+                    test: /\.ts$/,
+                    exclude: [PATHS.nodeModules],
+                    loader: "builtin:swc-loader",
+                    options: {
+                        jsc: {
+                            parser: {
+                                syntax: "typescript"
+                            }
                         }
-                    ]
+                    } satisfies SwcLoaderOptions,
+                    type: "javascript/auto"
                 },
                 {
                     test: /\.scss$/,
                     exclude: [PATHS.nodeModules],
                     use: [
-                        isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+                        rspack.CssExtractRspackPlugin.loader,
                         {
                             loader: "css-loader",
                             options: {
@@ -91,28 +98,32 @@ const webpack_ = (_: any, argv: any) => {
                             }
                         },
                         {
-                            loader: "postcss-loader",
+                            loader: "builtin:lightningcss-loader",
                             options: {
-                                sourceMap: true,
-                                postcssOptions: {
-                                    config: path.resolve(__dirname, "postcss.config.js")
-                                }
+                                targets: "chrome >= 110"
                             }
                         },
                         {
                             loader: "sass-loader",
                             options: {
-                                sourceMap: !isProduction
+                                sourceMap: !isProduction,
+                                api: "modern-compiler",
+                                implementation: require.resolve("sass-embedded")
                             }
                         }
                     ]
                 },
                 {
-                    test: /\.(m4a|svg|wav|png)$/,
+                    test: /\.(m4a|wav|png)$/,
                     type: "asset/resource",
                     generator: {
                         filename: "../static/assets/[name]-[contenthash][ext]"
                     }
+                },
+                {
+                    test: /\.svg$/i,
+                    issuer: /\.tsx?$/,
+                    use: [{ loader: "@svgr/webpack" }]
                 }
             ]
         },
@@ -123,6 +134,8 @@ const webpack_ = (_: any, argv: any) => {
                 "@main": path.resolve(__dirname, "src/popup/components/Main"),
                 "@context": path.resolve(__dirname, "src/popup/context"),
                 "@parts": path.resolve(__dirname, "src/popup/parts"),
+                "@popupUtils": path.resolve(__dirname, "src/popup/utils"),
+                "@popupCoreStyles": path.resolve(__dirname, "src/popup/styles"),
                 "@static": path.resolve(__dirname, "src/static"),
                 "@coreUtils": path.resolve(__dirname, "src/utils"),
                 "@hooks": path.resolve(__dirname, "src/utils/hooks"),
@@ -133,8 +146,8 @@ const webpack_ = (_: any, argv: any) => {
             new CleanWebpackPlugin({
                 cleanOnceBeforeBuildPatterns: []
             }),
-            new webpack.ProgressPlugin(),
-            new CopyWebpackPlugin({
+            new rspack.ProgressPlugin(),
+            new rspack.CopyRspackPlugin({
                 patterns: [
                     {
                         from: `${PATHS.publicFiles}/`,
@@ -150,22 +163,22 @@ const webpack_ = (_: any, argv: any) => {
                     }
                 ]
             }),
-            new ForkTsCheckerWebpackPlugin(),
-            new HtmlWebpackPlugin({
+            isProduction && new ForkTsCheckerWebpackPlugin({ typescript: { mode: "write-references" } }),
+            new rspack.HtmlRspackPlugin({
                 template: `${PATHS.publicHtml}/popup.html`,
                 filename: "../popup.html",
                 excludeChunks: ["offscreen", "background"]
             }),
-            new HtmlWebpackPlugin({
+            new rspack.HtmlRspackPlugin({
                 template: `${PATHS.publicHtml}/offScreen.html`,
                 filename: "../offScreen.html",
                 excludeChunks: ["popup", "background"]
             }),
-            new MiniCssExtractPlugin({
+            new rspack.CssExtractRspackPlugin({
                 filename: "../css/[name].css",
                 chunkFilename: "../css/[name].css"
             })
-        ]
+        ].filter(Boolean)
     };
 };
-module.exports = webpack_;
+module.exports = rspack_;

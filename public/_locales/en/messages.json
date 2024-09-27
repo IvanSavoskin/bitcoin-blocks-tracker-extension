@@ -8,6 +8,9 @@
   "fee": {
     "message": "Fee"
   },
+  "info": {
+    "message": "Info"
+  },
   "on": {
     "message": "ON"
   },
@@ -100,6 +103,21 @@
   },
   "feeNotificationBorderInputPlaceholder": {
     "message": "Fee border"
+  },
+  "version": {
+    "message": "Version"
+  },
+  "whatsNew": {
+    "message": "What's new"
+  },
+  "otherChanges": {
+    "message": "and other changes"
+  },
+  "releases": {
+    "message": "Releases"
+  },
+  "sourceCode": {
+    "message": "Source code"
   },
   "releaseNotesNotificationButton": {
     "message": "Release Notes"

@@ -1,0 +1,100 @@
+.theme-switcher {
+  aspect-ratio: 1;
+  background: none;
+  block-size: 32px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  inline-size: 32px;
+  margin-right: 5px;
+  outline-offset: 5px;
+  padding: 4px;
+  position: absolute;
+  right: 0;
+  -webkit-tap-highlight-color: transparent;
+  top: 0;
+  touch-action: manipulation;
+
+  &:hover,
+  &:focus-visible {
+    .theme-switcher-icon-sun,
+    .theme-switcher-icon-moon {
+      fill: var(--theme-switcher-hover-color);
+    }
+
+    .theme-switcher-icon-sun-beams {
+      stroke: var(--theme-switcher-hover-color);
+    }
+  }
+}
+
+.theme-switcher-icon {
+  block-size: 100%;
+  inline-size: 100%;
+  stroke-linecap: round;
+
+  > .theme-switcher-icon-moon,
+  .theme-switcher-icon-sun,
+  .theme-switcher-icon-sun-beams {
+    transform-origin: center center;
+  }
+
+  > .theme-switcher-icon-sun {
+    fill: var(--theme-switcher-color);
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform 0.5s cubic-bezier(0.5, 1.25, 0.75, 1.25);
+    }
+  }
+
+  > .theme-switcher-icon-moon {
+    fill: var(--theme-switcher-color);
+
+    @media (prefers-reduced-motion: no-preference) {
+      > circle {
+        transition: transform 0.25s cubic-bezier(0, 0, 0, 1);
+
+        @supports (cx: 1) {
+          transition: cx 0.25s cubic-bezier(0, 0, 0, 1);
+        }
+      }
+    }
+  }
+
+  > .theme-switcher-icon-sun-beams {
+    stroke: var(--theme-switcher-color);
+    stroke-width: 2px;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform 0.5s cubic-bezier(0.5, 1.5, 0.75, 1.25), opacity 0.5s cubic-bezier(0.25, 0, 0.3, 1);
+    }
+  }
+}
+
+:global(.dark-theme) .theme-switcher-icon {
+  > .theme-switcher-icon-sun {
+    transform: scale(1.75);
+    transition-duration: 0.25s;
+    transition-timing-function: cubic-bezier(0.25, 0, 0.3, 1);
+  }
+
+  > .theme-switcher-icon-sun-beams {
+    opacity: 0;
+    transform: rotateZ(-25deg);
+    transition-duration: 0.15s;
+  }
+
+  > .theme-switcher-icon-moon > circle {
+    transform: translateX(-7px);
+
+    @supports (cx: 1) {
+      cx: 17;
+      transform: translateX(0);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition-delay: 0.25s;
+      transition-duration: 0.5s;
+    }
+  }
+}

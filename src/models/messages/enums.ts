@@ -15,7 +15,8 @@ export enum BackgroundMessageType {
     CHANGE_FEE_NOTIFICATION_SOUND = "changeFeeNotificationSound",
     CHANGE_FEE_NOTIFICATION_BORDER = "changeFeeNotificationBorder",
     CHANGE_FEE_NOTIFICATION_BORDER_CHANGE_STATE = "changeFeeNotificationBorderChangeState",
-    CHANGE_FEE_NOTIFICATION_ENABLED = "changeFeeNotificationEnabled"
+    CHANGE_FEE_NOTIFICATION_ENABLED = "changeFeeNotificationEnabled",
+    CHANGE_THEME = "changeTheme"
 }
 
 export enum OffscreenMessageType {

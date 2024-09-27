@@ -7,7 +7,7 @@
   }
 
   label {
-    border: 1px solid #999;
+    border: 1px solid var(--base-border-color);
     border-right: 0;
     cursor: pointer;
     display: inline-block;
@@ -26,11 +26,15 @@
 
       label {
         border-radius: 0 6px 6px 0;
-        border-right: 1px solid #999;
+        border-right: 1px solid var(--base-border-color);
       }
 
       input:checked + label {
-        background: #ffc5c5;
+        background: var(--red-button-background-color);
+      }
+
+      input:hover:not(:checked) + label {
+        background: var(--red-button-hover-background-color);
       }
     }
 
@@ -42,7 +46,11 @@
       }
 
       input:checked + label {
-        background: #bfb;
+        background: var(--green-button-background-color);
+      }
+
+      input:hover:not(:checked) + label {
+        background: var(--green-button-hover-background-color);
       }
     }
   }

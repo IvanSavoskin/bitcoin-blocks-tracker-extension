@@ -3,6 +3,7 @@ import React, { FormEvent, useCallback, useEffect } from "react";
 import { sendMessage } from "@coreUtils/messagesUtils";
 import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
 import { ChangeNotificationSoundVolumeBackgroundMessage } from "@models/messages/types";
+import VolumeIcon from "@static/icons/volume.svg";
 
 import mainStyles from "./styles/SettingsTabs.module.scss";
 import styles from "./styles/VolumeControl.module.scss";
@@ -54,8 +55,10 @@ export default function VolumeControl({ label, eventType, storageKey, volume, se
                 {label}
             </label>
             <div className={styles.controlContainer}>
+                <VolumeIcon className={styles.icon} />
                 <input
                     id={`${storageKey}-control`}
+                    className={styles.input}
                     type="range"
                     min="0"
                     max="100"
@@ -64,7 +67,7 @@ export default function VolumeControl({ label, eventType, storageKey, volume, se
                     onMouseUp={onVolumeChange}
                     onInput={onVolumeInput}
                 />
-                {`${volume} %`}
+                <span className={styles.volumeLevel}>{`${volume} %`}</span>
             </div>
         </div>
     );

@@ -1,5 +1,7 @@
 import { createContext, useContext } from "react";
 
+import { ThemeEnum } from "@models/theme/enums";
+
 type MainContextType = {
     isSettingsOpen: boolean;
     toggleSettings: () => void;
@@ -12,6 +14,8 @@ type MainContextType = {
     isBlockNotificationEnabled: boolean;
     setIsBlockNotificationEnabled: (isBlockNotificationEnabled: boolean) => void;
     isTrackingEnabled: boolean;
+    theme: ThemeEnum;
+    toggleTheme: () => void;
 };
 
 export const MainContext = createContext<MainContextType | undefined>(undefined);
@@ -62,4 +66,12 @@ export function useIsTrackingEnabled() {
         throw new Error("useIsTrackingEnabled must be used within a MainProvider");
     }
     return context.isTrackingEnabled;
+}
+
+export function useTheme(): [ThemeEnum, () => void] {
+    const context = useContext(MainContext);
+    if (!context) {
+        throw new Error("useTheme must be used within a MainProvider");
+    }
+    return [context.theme, context.toggleTheme];
 }

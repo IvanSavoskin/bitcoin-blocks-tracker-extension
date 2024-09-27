@@ -5,8 +5,10 @@ import { useToggle } from "@hooks/useToogle";
 import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
 import {
     ChangeBlockNotificationEnabledBackgroundMessage,
-    ChangeFeeNotificationEnabledBackgroundMessage
+    ChangeFeeNotificationEnabledBackgroundMessage,
+    ChangeThemeBackgroundMessage
 } from "@models/messages/types";
+import { ThemeEnum } from "@models/theme/enums";
 
 import { MainContext } from "./MainContext";
 
@@ -16,6 +18,9 @@ export default function WithMainContext({ children }: PropsWithChildren) {
     const [activeSettingsTab, setActiveSettingsTab] = useState<number>();
     const [isFeeNotificationEnabled, setIsFeeNotificationEnabled] = useState(false);
     const [isBlockNotificationEnabled, setIsBlockNotificationEnabled] = useState(false);
+    const [theme, setTheme] = useState<ThemeEnum>(
+        window.matchMedia("(prefers-color-scheme: dark)") ? ThemeEnum.DARK : ThemeEnum.LIGHT
+    );
 
     const updateBlockNotificationEnabledState = useCallback((blockNotificationState: boolean) => {
         setIsBlockNotificationEnabled(blockNotificationState);
@@ -42,7 +47,7 @@ export default function WithMainContext({ children }: PropsWithChildren) {
             if (feeNotificationState) {
                 chrome.storage.local.get(["feeNotificationBorder"]).then((result) => {
                     const { feeNotificationBorder } = result;
-                    if (feeNotificationBorder === null || feeNotificationBorder.feeBorder === null) {
+                    if (!feeNotificationBorder || (!feeNotificationBorder.feeBorder && feeNotificationBorder.feeBorder !== 0)) {
                         setIsAutoFeeNotificationEnabled(true);
                         setActiveSettingsTab(1);
                         toggleSettings();
@@ -57,6 +62,34 @@ export default function WithMainContext({ children }: PropsWithChildren) {
         [toggleSettings, updateFeeNotificationEnabledState]
     );
 
+    const toggleTheme = useCallback(() => {
+        const newTheme = theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT;
+        setTheme(newTheme);
+        chrome.storage.local.set({ theme: newTheme });
+        sendMessage<ChangeThemeBackgroundMessage>({
+            target: [MessageTarget.BACKGROUND],
+            data: { theme: newTheme },
+            type: BackgroundMessageType.CHANGE_THEME
+        });
+
+        document.body.classList.toggle("dark-theme");
+        document.body.classList.toggle("light-theme");
+    }, [theme]);
+
+    const setInitialTheme = useCallback((_theme?: ThemeEnum | null) => {
+        if (_theme) {
+            setTheme(_theme);
+
+            if (_theme === ThemeEnum.DARK) {
+                document.body.classList.add("dark-theme");
+                document.body.classList.remove("light-theme");
+            } else {
+                document.body.classList.remove("dark-theme");
+                document.body.classList.add("light-theme");
+            }
+        }
+    }, []);
+
     const contextValue = useMemo(
         () => ({
             isSettingsOpen,
@@ -69,7 +102,9 @@ export default function WithMainContext({ children }: PropsWithChildren) {
             setIsFeeNotificationEnabled: changeFeeNotificationEnabled,
             isBlockNotificationEnabled,
             setIsBlockNotificationEnabled: updateBlockNotificationEnabledState,
-            isTrackingEnabled: isBlockNotificationEnabled || isFeeNotificationEnabled
+            isTrackingEnabled: isBlockNotificationEnabled || isFeeNotificationEnabled,
+            theme,
+            toggleTheme
         }),
         [
             isSettingsOpen,
@@ -79,15 +114,20 @@ export default function WithMainContext({ children }: PropsWithChildren) {
             isFeeNotificationEnabled,
             changeFeeNotificationEnabled,
             isBlockNotificationEnabled,
-            updateBlockNotificationEnabledState
+            updateBlockNotificationEnabledState,
+            theme,
+            toggleTheme
         ]
     );
 
     useEffect(() => {
-        chrome.storage.local.get(["isFeeNotificationEnabled", "isBlockNotificationEnabled"]).then((result) => {
+        chrome.storage.local.get(["isFeeNotificationEnabled", "isBlockNotificationEnabled", "theme"]).then((result) => {
+            console.log(result);
             setIsFeeNotificationEnabled(result.isFeeNotificationEnabled ?? false);
             setIsBlockNotificationEnabled(result.isBlockNotificationEnabled ?? false);
+            setInitialTheme(result.theme);
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <MainContext.Provider value={contextValue}>{children}</MainContext.Provider>;

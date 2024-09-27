@@ -7,8 +7,10 @@ import { FeeLevel } from "@models/fee/types";
 import { BackgroundMessageType, MessageTarget } from "@models/messages/enums";
 import { ChangeNotificationBorderBackgroundMessage } from "@models/messages/types";
 import Icon from "@parts/Icon";
-import clearIcon from "@static/icons/clear.svg";
-import saveIcon from "@static/icons/save.svg";
+import Input from "@parts/Input";
+import Select from "@parts/Select";
+import ClearIcon from "@static/icons/clear.svg";
+import SaveIcon from "@static/icons/save.svg";
 
 import mainStyles from "../styles/SettingsTabs.module.scss";
 import styles from "./styles/FeeBorderInput.module.scss";
@@ -90,9 +92,10 @@ export default function FeeBorderInput() {
             <label className={mainStyles.label} htmlFor="fee-border-input">
                 {translate("feeNotificationBorderInputLabel")}
             </label>
-            <div className={styles.inputContainer}>
-                <input
+            <div className={styles.borderInputContainer}>
+                <Input
                     id="fee-border-input"
+                    className={styles.borderInput}
                     value={feeBorder === undefined ? "" : feeBorder}
                     placeholder={translate("feeNotificationBorderInputPlaceholder")}
                     onInput={onFeeBorderChange}
@@ -100,14 +103,14 @@ export default function FeeBorderInput() {
                     min={0}
                     step={1}
                 />
-                <select name="feeLevel" onChange={onFeeLevelChange} value={feeLevel}>
+                <Select name="feeLevel" onChange={onFeeLevelChange} value={feeLevel}>
                     <option value={FeeLevel.SLOW}>{translate("slow")}</option>
                     <option value={FeeLevel.MEDIUM}>{translate("medium")}</option>
                     <option value={FeeLevel.FAST}>{translate("fast")}</option>
-                </select>
+                </Select>
                 <div className={styles.iconsContainer}>
-                    <Icon src={clearIcon} link onClick={onFeeBorderClear} disabled={feeBorder === undefined} />
-                    <Icon src={saveIcon} link onClick={onFeeBorderSave} disabled={!isFeeChanged} />
+                    <Icon icon={ClearIcon} link onClick={onFeeBorderClear} disabled={feeBorder === undefined} />
+                    <Icon icon={SaveIcon} link onClick={onFeeBorderSave} disabled={!isFeeChanged} />
                 </div>
             </div>
         </div>

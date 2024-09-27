@@ -1,11 +1,15 @@
+import { lazy } from "react";
+
 import classNames from "classnames";
 
 import Icon, { IconSize } from "@parts/Icon";
-import SettingsTabs from "@settings/SettingsTabs";
-import closesIcon from "@static/icons/close.svg";
+import { WithSuspense } from "@popupUtils/WithSuspense";
+import CloseIcon from "@static/icons/close.svg";
 
 import settingsStyles from "./styles/Settings.module.scss";
 import styles from "./styles/SettingsContent.module.scss";
+
+const SettingsTabs = lazy(() => import(/* webpackChunkName: "SettingsTabs", webpackPrefetch: true */ "@settings/SettingsTabs"));
 
 interface SettingsContentProps {
     isVisible: boolean;
@@ -18,12 +22,16 @@ export default function SettingsContent({ isVisible, onClose }: SettingsContentP
             <div className={styles.content}>
                 <Icon
                     onClick={onClose}
-                    src={closesIcon}
+                    icon={CloseIcon}
                     link
                     containerClassName={settingsStyles.iconContainer}
                     size={IconSize.SMALL}
                 />
-                {isVisible && <SettingsTabs />}
+                {isVisible && (
+                    <WithSuspense>
+                        <SettingsTabs />
+                    </WithSuspense>
+                )}
             </div>
         </div>
     );
